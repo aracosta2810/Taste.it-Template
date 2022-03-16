@@ -1,0 +1,8 @@
+#Admin
+/admin-taste.it/node_modules
+/admin-taste.it/public/dist
+/admin-taste.it/public/plugins
+
+#Site
+/taste.it/node_modules
+/admin-taste.it/public/assets
