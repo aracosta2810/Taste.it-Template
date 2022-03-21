@@ -15,23 +15,20 @@ const BookTableForm = () => {
   const handleSunbmit = (e) =>{
     e.preventDefault();
 
-    console.log({
+    let data ={
       name: e.target.name.value,
       email: e.target.email.value,
-      phone: e.target.phone.value,
-      date: date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear(),
-      time: time,
+      telephone: e.target.phone.value,
+      check_in: `${date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()}`,
+      time,
       guest: e.target.guest.value
-    });
+    }
+    
+    console.log(data);
 
-    axios.post('ruta.com',{//Actualizar con ruta del server
-      name: e.target.name.value,
-      email: e.target.email.value,
-      phone: e.target.phone.value,
-      date: date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear(),
-      time: time,
-      guest: e.target.guest.value
-    })
+    axios.post(`${window.urlServer}/book-table/create`,data)
+    .then(res => console.log(res))
+    .catch(e => console.log("Ha habido un error " + e))
   }
 
     return (
@@ -83,7 +80,7 @@ const BookTableForm = () => {
                       <div className="form-field">
                         <div className="select-wrap">
                           <div className="icon"><span className="fa fa-chevron-down" /></div>
-                          <select name id="guest" className="form-control">
+                          <select id="guest" className="form-control">
                             <option value>Guest</option>
                             <option value='1'>1</option>
                             <option value='2'>2</option>

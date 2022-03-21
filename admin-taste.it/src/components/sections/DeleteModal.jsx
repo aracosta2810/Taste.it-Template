@@ -1,16 +1,17 @@
 import axios from "axios"
 
 const DeleteModal = ({currentData, url}) => {
-      const handleDeleteData = () => {
-        let dataToDelete = []//Ver como organizar los ids para ver como mandarlos para el back
+      const handleDeleteData = async () => {
+        let ids = []//Ver como organizar los ids para ver como mandarlos para el back
 
         currentData.forEach(item => {
-          dataToDelete.push(item.id)
+          ids.push(item.id)
         });
         
+        console.log({ids: [...ids]});
 
         // ! Hacer esto despues, empaquetar la infrmacion y tal. Falta el token. La url la pasan por parametros segun si es borrar mensajes u ofertas
-        axios.delete(url,{ids: dataToDelete, token: {}})
+        axios.post(url, {ids: [...ids]})
         .then(res => console.log(res))
         .catch(e => console.log(e))
       }
@@ -26,7 +27,7 @@ const DeleteModal = ({currentData, url}) => {
                   </button>
                 </div>
                 <div className="modal-body">
-                  <p>Are you sure? This action has not return</p>
+                  <p>This action has not return. Are you sure you want to continue?</p>
                 </div>
                 <div className="modal-footer justify-content-between">
                   <button onClick={() => handleDeleteData()} type="button" className="btn btn-danger" /*data-dismiss="modal"*/>Delete</button>

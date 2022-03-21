@@ -36,10 +36,14 @@ const offersslice = createSlice({
             ]},
           ]
     },
-    reducers:{}
+    reducers:{
+      SET_OFFERS : (state, action) => {
+        state.food = action.payload
+      }
+    }
 })
 
-//falta exportar el reducer si tiene
+export const {SET_OFFERS} = offersslice.actions
 
 export const selectOffers = (state) => state.offers.food;
 

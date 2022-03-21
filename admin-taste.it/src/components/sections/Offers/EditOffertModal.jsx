@@ -5,29 +5,32 @@ const EditOffertModal = ({currentData}) => {
   const [nameField, setNameField] = useState('')
   const [priceField, setPriceField] = useState(0)
   const [isEspecial, setIsEspecial] = useState(false)
+  const [file, setFile] = useState('')
   const [descriptionField, setDescriptionField] = useState(0)
 
   useEffect(() => {
     setNameField(currentData.title)
     setPriceField(currentData.price)
     setIsEspecial(currentData.is_especial === 1? true: false)
+    setFile(currentData.photo)
     setDescriptionField(currentData.description)
   }, [currentData])
   
-
-  const handleEditData = (e) => {
+  const handleEditData = async (e) => {
     e.preventDefault();
+
+    const data = {
+      title: nameField,
+      price: priceField,
+      // photo: file,
+      is_especial: isEspecial? 1 : 0,
+      description: descriptionField,
+      type:'Lunch',
+      token: ''
+  }
+  
     // ! Hacer esto despues, empaquetar la infrmacion y tal. Empaquetar el token
-    axios.post(`server.com/offer/update/${currentData.id}`,
-      {
-        title: nameField,
-        price: priceField,
-        url_photo: '',
-        is_especial: isEspecial,
-        description: descriptionField,
-        token: {}
-    }
-    )
+    axios.put(`${window.urlServer}/offer/update/${currentData.id}`,data)
     .then(res => console.log(res))
     .catch(e => console.log(e))
   };
@@ -83,25 +86,14 @@ const EditOffertModal = ({currentData}) => {
             </div>
             <div className="input-group">
               <div className="custom-file">
-                <input
-                  type="file"
-                  className="custom-file-input"
-                  id="exampleInputFile"
-                />
-                <label className="custom-file-label" htmlFor="exampleInputFile">
-                  {currentData.url_photo}
-                </label>
-              </div>
-              <div className="input-group-append">
-                <span className="input-group-text" id>
-                  Upload
-                </span>
+                <input type="file"  accept="image/*" onChange={(e) => setFile(e.target.files[0])} className="custom-file-input" id="exampleInputFile" />
+                <label className="custom-file-label" htmlFor="exampleInputFile">{file.name}</label>
               </div>
             </div>
             <div className="form-group mt-3">
               <label htmlFor="inputDescription">Description</label>
               <br />
-              <input type="text" className="form-control mb-2" onChange={(e) => setDescriptionField(e.target.value)} value={descriptionField}/>
+              <input type="text" className="form-control mb-2" onChange={(e) => e.target.files.length === 0? '' : setFile(e.target.files[0])} value={descriptionField}/>
             </div>
             <div className="d-flex justify-content-end">
               <button type="submit" className="btn btn-success">

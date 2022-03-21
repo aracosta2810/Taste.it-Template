@@ -2,28 +2,28 @@ import { Link } from "react-router-dom";
 
 const AppBar = () => {
     return (
-        <nav className="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav className="main-header navbar navbar-expand border-bottom-0 navbar-light">
           {/* Left navbar links */}
           <ul className="navbar-nav">
             <li className="nav-item">
               <a
-                className="nav-link"
+                className="nav-link "
                 data-widget="pushmenu"
                 href="/"
                 role="button"
               >
-                <i className="fas fa-bars" />
+                <i className="fas fa-bars " />
               </a>
             </li>
-            <li className="nav-item d-none d-sm-inline-block">
+            {/* <li className="nav-item d-none d-sm-inline-block">
               <a href="/" className="nav-link">
                 Home
               </a>
-            </li>
+            </li> */}
             
           </ul>
           {/* SEARCH FORM */}
-          <form className="form-inline ml-3">
+          {/* <form className="form-inline ml-3">
             <div className="input-group input-group-sm">
               <input
                 className="form-control form-control-navbar"
@@ -37,7 +37,7 @@ const AppBar = () => {
                 </button>
               </div>
             </div>
-          </form>
+          </form> */}
         </nav>
     );
 }

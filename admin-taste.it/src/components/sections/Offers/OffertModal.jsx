@@ -16,7 +16,7 @@ const OffertModal = ({currentData}) => {
                 </button>
               </div>
               <div className="modal-body">
-                <img src={currentData.url_photo} alt="" width={'100%'} srcSet="" />
+                <img src={currentData.photo} alt="" width={'100%'} srcSet="" />
               </div>
             </div>
             {/* /.modal-content */}

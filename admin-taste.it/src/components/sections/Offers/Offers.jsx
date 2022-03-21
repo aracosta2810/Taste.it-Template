@@ -11,7 +11,7 @@ const offers = [
     id: 1,
     title: "Pizza",
     price: 12.4,
-    url_photo: pic,
+    photo: pic,
     is_especial: 1,
     description: "Cheese and tomatoes",
     isSelected: false,
@@ -20,7 +20,7 @@ const offers = [
     id: 2,
     title: "Rice and Meat",
     price: 25.4,
-    url_photo: pic,
+    photo: pic,
     is_especial: 0,
     description: "With meat",
     isSelected: false,
@@ -206,7 +206,7 @@ const Offers = () => {
       {offertModal ? <OffertModal currentData={currentData} /> : null}
       {addOffertModal ? <AddOffertModal currentData={currentData} /> : null}
       {editOffertModal ? <EditOffertModal currentData={currentData} /> : null}
-      {deleteModal ? <DeleteModal currentData={currentData} url='test.com'/> : null}
+      {deleteModal ? <DeleteModal currentData={currentData} url={`${window.urlServer}/offer/delete`}/> : null}
     </div>
   );
 };

@@ -14,8 +14,8 @@ const HeaderHome = () => {
               loop
               
             >
-              <div  class="item" style={{backgroundSize:'cover', backgroundPosition:'center',backgroundImage: `url(${process.env.PUBLIC_URL + '/assets/images/bg_1.jpg'})`, height:'100vh'}}>
-                  {/* <div className="overlay" /> */}
+              <div  className="item" style={{backgroundSize:'cover', backgroundPosition:'center',backgroundImage: `url(${process.env.PUBLIC_URL + '/assets/images/bg_1.jpg'})`, height:'100vh'}}>
+                  <div className="overlay" />
                   {/* <div className="container" >
                     <div className="row no-gutters slider-text js-fullheight align-items-center justify-content-center" style={{height:'100vh'}}>
                       <div className="col-md-12 ftco-animate fadeInUp ftco-animated">
@@ -30,8 +30,7 @@ const HeaderHome = () => {
 
 
               </div>
-              {/* <div  class="item" style={{backgroundSize:'cover', backgroundPosition:'center',backgroundImage: `url(${process.env.PUBLIC_URL + '/assets/images/bg_2.jpg'})`, height:'100vh'}}>
-                <div  >
+              <div  className="item" style={{backgroundSize:'cover', backgroundPosition:'center',backgroundImage: `url(${process.env.PUBLIC_URL + '/assets/images/bg_2.jpg'})`, height:'100vh'}}>
                   <div className="overlay" />
                   <div className="container">
                     <div className="row no-gutters slider-text js-fullheight align-items-center justify-content-center" style={{height:'100vh'}}>
@@ -44,8 +43,7 @@ const HeaderHome = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-              </div> */}
+              </div>
           </OwlCarousel>
       </section>
 

@@ -4,6 +4,8 @@ import { selectOffers } from "../../Redux/OffersSlice";
 const EspecialOffers = () => {
   const data = useSelector(selectOffers);
 
+  // console.log('Data   '+JSON.stringify(data));
+
   return (
     <section className="ftco-section">
       <div className="container">

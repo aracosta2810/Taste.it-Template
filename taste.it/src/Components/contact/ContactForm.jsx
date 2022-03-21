@@ -4,17 +4,20 @@ const ContactForm = () => {
     const handleSubnmit = (e) => {
       e.preventDefault()
 
-      console.log({name: e.target.name.value,
-        email: e.target.email.value,
-        subject: e.target.subject.value,
-        message: e.target.message.value});
+      // console.log({name: e.target.name.value,
+      //   email: e.target.email.value,
+      //   subject: e.target.subject.value,
+      //   message: e.target.message.value});
 
-      axios.post('ruta.com',{//modificar con la ruta correcta
-        name: e.target.name.value,
-        email: e.target.email.value,
-        subject: e.target.subject.value,
-        message: e.target.message.value
-      })
+        let data = {//modificar con la ruta correcta
+          name: e.target.name.value,
+          email: e.target.email.value,
+          subject: e.target.subject.value,
+          message: e.target.message.value,
+        }
+        console.log(data);
+        // return
+      axios.post(`${window.urlServer}/contact/create`,data)
       .then(res => console.log(res))
       .catch(e => console.log("Error: " + e))
     }

@@ -49,7 +49,7 @@ const MenuSection = () => {
                                 <div className="form-field">
                                     <div className="select-wrap">
                                     <div className="icon"><span className="fa fa-chevron-down" /></div>
-                                    <select name id className="form-control">
+                                    <select id="guest" className="form-control">
                                         <option value>Guest</option>
                                         <option value>1</option>
                                         <option value>2</option>

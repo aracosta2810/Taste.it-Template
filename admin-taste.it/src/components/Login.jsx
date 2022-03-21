@@ -1,9 +1,8 @@
 
 const Login = ({handleLogin}) => {
-
   return (
     <div className="hold-transition login-page">
-        <img src={process.env.PUBLIC_URL + 'favicon.ico'} style={{marginBottom: 10}} alt="" srcset="" />
+        <img src={process.env.PUBLIC_URL + 'favicon.ico'} style={{marginBottom: 10}} alt="" srcSet="" />
       <div className="login-box">
         <div className="login-logo">
           <a href="../../index2.html">

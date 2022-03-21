@@ -1,12 +1,22 @@
 import axios from "axios";
 
 const MessageModal = ({ currentData }) => {
-  const handleDeleteData = () => {
+  const handleDeleteData = async () => {
     // ! Hacer esto despues, empaquetar la infrmacion y tal. Falta el token
     axios
-      .delete(`/contact/destroy/${currentData.id}`, { token: {} })
+      .post(`${window.urlServer}/contact/delete`, {ids:[currentData.id], token: {} })
       .then((res) => console.log(res))
       .catch((e) => console.log(e));
+
+    // fetch(`http://192.168.43.2:8080/taste-it/public/contact/delete`, {
+    //   method:"DELETE",
+    //   body:{
+    //     ids:[7]
+    //   }
+    // }).then(res => res.json())
+    // .then((res) => console.log(res))
+    // .catch((e) => console.log(e));
+      
   };
 
   return (
@@ -22,7 +32,7 @@ const MessageModal = ({ currentData }) => {
             <div className="card-header">
               <h3 className="card-title">{currentData.name}</h3>
               <span className="mailbox-read-time float-right">
-                {currentData.date + "   " + currentData.time}
+                {currentData.date}
               </span>
             </div>
             {/* /.card-header */}

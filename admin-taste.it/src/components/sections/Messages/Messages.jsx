@@ -12,7 +12,6 @@ const testData = [
     message: "Se demoran mucho en atenderte",
     date:'17-2-2022',
     time:'08:30 pm',
-    isSelected: false
   },
   {
     id: 2,
@@ -22,12 +21,11 @@ const testData = [
     message: "Excelente comida",
     date:'16-2-2022',
     time:'08:30 pm',
-    isSelected: false
   },
 ];
 
 const Messages = () => {
-  const [data, setData] = useState([]); // esto va null
+  const [data, setData] = useState(null); // esto va null
   const [currentData, setCurrentData] = useState({})
   const [messageModal, setMessageModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -37,6 +35,30 @@ const Messages = () => {
     let newData = [...data.filter((item) => item.isSelected === true)]
     setCurrentData(newData)
   };
+
+  //?Poner url bien cuando lo vayas a probar bien
+  //*/contact
+  useEffect(() => {
+    testData.forEach(item => {
+      item.isSelected = false
+    })
+    setData(testData)
+    //--------------------------------
+    axios.get(`${window.urlServer}/contact`, { token: {} })
+      .then((res) => {
+        let data = res.data
+
+        data.forEach(item => item.isSelected = false)
+        setData(data)
+        // console.log(res);
+      })
+      .catch((e) => console.log("Error " + e));
+  }, []);
+
+  const handleViewMessageModal = (id) => {
+    setMessageModal(true);
+    setCurrentData(...data.filter((item) => item.id === id));
+  }
 
   const handleSelect = (id, selectAll) => {
     let newData = []
@@ -75,23 +97,8 @@ const Messages = () => {
     }
     
     setData(newData);
-  };
+  }; 
   
-
-  //?Poner url bien cuando lo vayas a probar bien
-  //*/contact
-    useEffect(() => {
-      setData(testData)
-      // axios
-      //   .get("https://jsonplaceholder.typicode.com/users", { token: {} })
-      //   .then((res) => setData(res.data))
-      //   .catch((e) => console.log("Error " + e));
-    }, []);
-
-    const handleViewMessageModal = (id) => {
-      setMessageModal(true);
-      setCurrentData(...data.filter((item) => item.id === id));
-    }
 
   return (
     <div
@@ -100,14 +107,16 @@ const Messages = () => {
       role="tabpanel"
       aria-labelledby="vert-tabs-home-tab"
     >
-      {data.length === 0 ? (
+      {data === null ? (
         <div
           className="d-flex justify-content-center mt-5"
           style={{ fontSize: "1.5rem" }}
         >
           <i className="fas fa-2x fa-sync-alt fa-spin mt-5"></i>
         </div>
-      ) : (
+      ) : data.length === 0? 
+          <h2 className="mt-4 text-center">There is nothing to show</h2>
+        :(
         <div className="card card-primary card-outline">
           <div className="card-header">
             <h3 className="card-title">Inbox</h3>
@@ -116,7 +125,7 @@ const Messages = () => {
           </div>
           {/* /.card-header */}
           <div className="card-body p-0">
-            <div className="mailbox-controls">
+            <div className="mailbox-controls ml-3 ml-sm-0">
               {/* Check all button */}
               <button onClick={() => handleSelect(null, true)} type="button" className="btn btn-default btn-sm checkbox-toggle">
                 <i className="far fa-check-square" />
@@ -180,7 +189,7 @@ const Messages = () => {
           </div>
           {/* /.card-body */}
           <div className="card-footer p-0">
-            <div className="mailbox-controls">
+            <div className="mailbox-controls ml-3 ml-sm-0">
               {/* Check all button */}
               <button onClick={() => handleSelect(null, true)} type="button" className="btn btn-default btn-sm checkbox-toggle"><i className="far fa-check-square" />
               </button>
@@ -201,7 +210,7 @@ const Messages = () => {
           </div>
         </div>
        )}
-      {deleteModal? <DeleteModal currentData={currentData} url='' /> : null}
+      {deleteModal? <DeleteModal currentData={currentData} url={`${window.urlServer}/contact/delete`} /> : null}
       {messageModal? <MessageModal currentData={currentData}/> : null}
     </div>
   );

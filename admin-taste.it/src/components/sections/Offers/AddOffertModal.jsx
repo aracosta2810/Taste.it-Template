@@ -6,21 +6,27 @@ const AddOffertModal = () => {
   const [nameField, setNameField] = useState('')
   const [priceField, setPriceField] = useState(0)
   const [isEspecial, setIsEspecial] = useState(false)
+  const [file, setFile] = useState('')
   const [descriptionField, setDescriptionField] = useState('')
 
-    const handleAdd = (e) => {
+    const handleAdd = async (e) => {
       e.preventDefault();
       // ! Hacer esto despues, empaquetar la infrmacion y tal. Empaquetar el token
-      axios.post(`urlserver/offer/create/`,
-        {
-          title: nameField,
-          price: priceField,
-          url_photo: '',
-          is_especial: isEspecial,
-          description: descriptionField,
-          token: {}
-        }
-      )
+      // console.log(file);
+
+      const data = {
+        title: nameField,
+        price: priceField,
+        photo: file,
+        is_especial: isEspecial,
+        description: descriptionField,
+        type:'Lunch',
+        token: {}
+      }
+
+      console.log(data);
+
+      axios.post(`${window.urlServer}/offer/create`,data)
       .then(res => console.log(res))
       .catch(e => console.log(e))
     }
@@ -60,11 +66,8 @@ const AddOffertModal = () => {
                 <div className="input-group">
                   <div className="custom-file">
                   {/* Pendiente */}
-                    <input type="file" className="custom-file-input" id="exampleInputFile" />
-                    <label className="custom-file-label" htmlFor="exampleInputFile">Screenshot_2021-12-28_10-07-24.png</label>
-                  </div>
-                  <div className="input-group-append">
-                    <span className="input-group-text" id>Upload</span>
+                    <input type="file"  accept="image/*" onChange={(e) => e.target.files.length === 0? '' : setFile(e.target.files[0])} className="custom-file-input" id="exampleInputFile" />
+                    <label className="custom-file-label" htmlFor="exampleInputFile">{file.name}</label>
                   </div>
                 </div>
                 <div className="form-group mt-3" id="descriptionFields">

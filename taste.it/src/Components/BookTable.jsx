@@ -11,30 +11,27 @@ import { useState } from "react";
 const BookTable = () => {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState('08:00');
+
   const handleDateChange = date => setDate(date);
-  const handleTimeChange = time => setTime(time);
 
   const handleSunbmit = (e) =>{
     e.preventDefault();
-    console.log({
-      name: e.target.name.value,
-      email: e.target.email.value,
-      phone: e.target.phone.value,
-      date: date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear(),
-      time: time,
-      guest: e.target.guest.value
-    });
 
-    axios.post('ruta.com',{//Actualizar con ruta del server
+    let data ={
       name: e.target.name.value,
       email: e.target.email.value,
-      phone: e.target.phone.value,
-      date: date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear(),
-      time: time,
+      telephone: e.target.phone.value,
+      check_in: `${date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()}`,
+      time,
       guest: e.target.guest.value
-    })
-    .then(res => console.log(""))
+    }
+    
+    console.log(data);
+
+    axios.post(`${window.urlServer}/book-table/create`,data)
+    .then(res => console.log(res))
     .catch(e => console.log("Ha habido un error " + e))
+
   }
 
     return ( 
@@ -78,7 +75,7 @@ const BookTable = () => {
                               style={{width:'100%'}} 
                               className="form-control book_time" 
                               value={time} 
-                              onChange={() => handleTimeChange( time)} 
+                              onChange={(e) => setTime(e.target.value)} 
                             />
                           </div>
                         </div>
@@ -88,7 +85,7 @@ const BookTable = () => {
                           <div className="form-field">
                             <div className="select-wrap">
                               <div className="icon"><span className="fa fa-chevron-down" /></div>
-                              <select name id="guest" className="form-control">
+                              <select id="guest" className="form-control">
                                 <option value>Guest</option>
                                 <option value='1'>1</option>
                                 <option value='2'>2</option>

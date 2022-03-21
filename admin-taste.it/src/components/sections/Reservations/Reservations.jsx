@@ -6,7 +6,7 @@ const testData = [
     id: 1,
     name: "Jhon",
     email: "example@gmail.com",
-    date: "28-2-2022",
+    check_in: "28-2-2022",
     time: "08:22 pm",
     guest: 5,
     isSelected: false,
@@ -15,7 +15,7 @@ const testData = [
     id: 2,
     name: "Sara",
     email: "example@gmail.com",
-    date: "14-3-2022",
+    check_in: "14-3-2022",
     time: "09:00 pm",
     guest: 1,
     isSelected: false,
@@ -23,14 +23,35 @@ const testData = [
 ];
 
 const Reservations = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
-    setData(testData);
-    //   axios.get('url')
-    //   .then(res => console.log(res))
-    //   .catch(e => console.log('Error: ' + e))
+    // setData(testData);
+    axios.get(`${window.urlServer}/book-table`, {
+      token: localStorage.getItem('token')
+    })
+    .then(res => {
+      setData(res.data)
+      console.log(res);
+    })
+    .catch(e => console.log('Error: ' + e))
   }, []);
+
+  const handleAcceptOrReject = async(accept) => {
+    let ids = [];
+
+    data.forEach((item) => {
+      if (item.isSelected) ids.push(item.id);
+    });
+
+    axios
+      .post(accept ? `${window.urlServer}/confirmate` : `${window.urlServer}/denegate`, {
+        ids: [...ids],
+        token: "",
+      })
+      .then((res) => console.log(res))
+      .catch((e) => console.log("Error: " + e));
+  };
 
   const handleSelect = (id, selectAll) => {
     let newData = [];
@@ -71,34 +92,20 @@ const Reservations = () => {
     setData(newData);
   };
 
-  const handleAcceptOrReject = (accept) => {
-    let ids = [];
-
-    data.forEach((item) => {
-      if (item.isSelected) ids.push(item.id);
-    });
-
-    axios
-      .post(accept ? "urlAccept.com" : "urlReject.com", {
-        ids: [...ids],
-        token: "",
-      })
-      .then((res) => console.log(res))
-      .catch((e) => console.log("Error: " + e));
-  };
-
-  return data.length === 0 ? (
+  return data == null ? (
     <div
       className="d-flex justify-content-center mt-5"
       style={{ fontSize: "1.5rem" }}
     >
       <i className="fas fa-2x fa-sync-alt fa-spin mt-5"></i>
     </div>
-  ) : (
+  ) : data.length === 0? 
+      <h2 className="mt-4 text-center">There is nothing to show</h2>
+    : (
     <div>
-      <h3 className="mb-3">Reservations Requests</h3>
+      <h3 className="mb-3 ml-3 ml-sm-0">Reservations Requests</h3>
       <div className="d-flex align-items-center  mb-3">
-        <div>
+        <div className="ml-3 ml-sm-0">
           <button
             onClick={() => handleSelect(null, true)}
             type="button"
@@ -144,11 +151,13 @@ const Reservations = () => {
               <div className="info-box-content">
                 <span className="info-box-text">
                   <b>{item.name}</b>
-                  <span className=" ml-2">{item.email}</span>
+                  <span className="ml-2">
+                    {item.check_in} <span className="ml-2">{item.time}</span>
+                  </span>
                 </span>
                 <span className="info-box-text">Guest: {item.guest}</span>
                 <span className="">
-                  {item.date} <span className="ml-2">{item.time}</span>
+                  {item.email}
                 </span>
               </div>
               {/* /.info-box-content */}
