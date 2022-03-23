@@ -29,16 +29,17 @@ const Reservations = () => {
   useEffect(() => {
     setData(testData);
     
-    // axios.get(`${window.urlServer}/book-table`, {
-    //   token: localStorage.getItem('token')
-    // })
-    // .then(res => {
-    //   let data = res.data
+    return
+    axios.get(`${window.urlServer}/book-table`, {
+      token: localStorage.getItem('token')
+    })
+    .then(res => {
+      let data = res.data
 
-    //   data.forEach(item => item.isSelected = false)
-    //   setData(data)
-    // })
-    // .catch(e => console.log('Error: ' + e))
+      data.forEach(item => item.isSelected = false)
+      setData(data)
+    })
+    .catch(e => console.log('Error: ' + e))
   }, []);
 
   const handleAcceptOrReject = async(accept) => {

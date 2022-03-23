@@ -42,16 +42,17 @@ const Messages = () => {
     })
     setData(testData)
 
+    return
     //--------------------------------
-    // axios.get(`${window.urlServer}/contact`, { token: {} })
-    //   .then((res) => {
-    //     let data = res.data
+    axios.get(`${window.urlServer}/contact`, { token: {} })
+      .then((res) => {
+        let data = res.data
 
-    //     data.forEach(item => item.isSelected = false)
-    //     setData(data)
-    //     // console.log(res);
-    //   })
-    //   .catch((e) => console.log("Error " + e));
+        data.forEach(item => item.isSelected = false)
+        setData(data)
+        // console.log(res);
+      })
+      .catch((e) => console.log("Error " + e));
   }, []);
 
   const handleViewMessageModal = (id) => {

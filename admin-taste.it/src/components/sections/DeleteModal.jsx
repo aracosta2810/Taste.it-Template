@@ -2,12 +2,12 @@ import axios from "axios"
 
 const DeleteModal = ({currentData, url, setData}) => {
       const handleDeleteData = async () => {
-        let ids = []//Ver como organizar los ids para ver como mandarlos para el back
+        let ids = []
 
         currentData.forEach(item => {
           ids.push(item.id)
         });
-        // console.log({ids: [...ids]});
+        console.log(ids);
         setData(null)
 
         // ! Hacer esto despues, empaquetar la infrmacion y tal. Falta el token. La url la pasan por parametros segun si es borrar mensajes u ofertas

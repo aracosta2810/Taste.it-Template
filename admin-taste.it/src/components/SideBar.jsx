@@ -8,7 +8,7 @@ const sections = [
   {url:'/messages', title: 'Messages'},
 ]
 
-const SideBar = () => {
+const SideBar = ({user}) => {
     const route = useLocation()
 
     return (
@@ -23,7 +23,7 @@ const SideBar = () => {
             height={100}
             style={{ opacity: ".8" }}
           />
-          <span className="brand-text font-weight-light">Taste.it</span>
+          <span className="brand-text font-weight-light">{user === null? '' : user.name}</span>
         </Link>
         {/* Sidebar */}
         <div className="sidebar">

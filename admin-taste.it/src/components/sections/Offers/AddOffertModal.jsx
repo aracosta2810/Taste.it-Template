@@ -3,42 +3,32 @@ import { useState } from "react";
 
 const AddOffertModal = () => {
   //! Falta el de subir foto
-  const [type, setType] = useState('Breakfast')
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState(0)
   const [isEspecial, setIsEspecial] = useState(false)
   const [file, setFile] = useState('')
-  const [description, setDescription] = useState('')
+  const [info, setInfo] = useState('')
 
-  console.log(type);
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    // ! Hacer esto despues, empaquetar la infrmacion y tal. Empaquetar el token
+    // console.log(file);
 
-    const handleAdd = async (e) => {
-      e.preventDefault();
-      // ! Hacer esto despues, empaquetar la infrmacion y tal. Empaquetar el token
-      // console.log(file);
+    let formData = new FormData(e.target)
+    formData.set('is_especial', formData.get('is_especial') === 'on'? 1 : 0)
 
-      const data = {
-        type: type,
-        title: title,
-        price: price,
-        photo: file,
-        is_especial: isEspecial,
-        description: description,
-        token: {}
-      }
+    formData.forEach(item => console.log(item))
 
-      console.log(data);
-
-      axios.post(`${window.urlServer}/offer/create`,data)
-      .then(res => console.log(res))
-      .catch(e => console.log(e))
-    }
+    axios.post(`${window.urlServer}/offer/create`,formData)
+    .then(res => console.log(res))
+    .catch(e => console.log(e))
+  }
 
     const cleanFields = () => {
       setTitle('')
       setPrice(0)
       setIsEspecial(false)
-      setDescription('')
+      setInfo('')
     }
 
     return (
@@ -54,8 +44,7 @@ const AddOffertModal = () => {
             <form onSubmit={(e) => handleAdd(e)} className="modal-body" encType="multipart">
                 <div className="form-group">
                   <label>Section</label>
-                  <select onChange={(e) => setType(e.target.value)} className="form-control select2 select2-hidden-accessible" style={{width: '100%'}} data-select2-id={1} tabIndex={-1} aria-hidden="true">
-                    {/* <option selected="selected" data-select2-id={3}> </option> */}
+                  <select name="type"  className="form-control select2 select2-hidden-accessible" style={{width: '100%'}} data-select2-id={1} tabIndex={-1} aria-hidden="true">
                     <option data-select2-id={33}>Breakfast</option>
                     <option data-select2-id={34}>Lunch</option>
                     <option data-select2-id={35}>Dinner</option>
@@ -65,30 +54,29 @@ const AddOffertModal = () => {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="inputName">Name</label>
-                  <input type="text" id="inputName" className="form-control" onChange={(e) => setTitle(e.target.value)} value={title} />
+                  <label htmlFor="name">Name</label>
+                  <input name="title" type="text" id="inputName" className="form-control" onChange={(e) => setTitle(e.target.value)} value={title} />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="inputClientCompany">Price</label>
+                  <label htmlFor="price">Price</label>
                   <div className="d-flex align-items-center">
-                    <input type="number" id="inputClientCompany" className="form-control w-25" onChange={(e) => setPrice(e.target.value)} value={price} />
+                    <input name="price" type="number" id="inputClientCompany" className="form-control w-25" onChange={(e) => setPrice(e.target.value)} value={price} />
                     <div className="form-check ml-4">
-                      <input type="checkbox" className="form-check-input " id="exampleCheck1" onChange={(e) => setIsEspecial(e.target.checked)} checked = {isEspecial}/>
+                      <input name="is_especial" type="checkbox" className="form-check-input " id="exampleCheck1" onChange={(e) => setIsEspecial(e.target.checked)} checked = {isEspecial}/>
                       <label className="form-check-label" htmlFor="exampleCheck1">Special offer</label>
                     </div>
                   </div>
                 </div>
                 <div className="input-group">
                   <div className="custom-file">
-                  {/* Pendiente */}
-                    <input type="file"  accept="image/*" onChange={(e) => e.target.files.length === 0? '' : setFile(e.target.files[0])} className="custom-file-input" id="exampleInputFile" />
-                    <label className="custom-file-label" htmlFor="exampleInputFile">{file.name}</label>
+                    <input name="photo" type="file"  accept="image/*" onChange={(e) => e.target.files.length === 0? '' : setFile(e.target.files[0])} className="custom-file-input" id="exampleInputFile" />
+                    <label className="custom-file-label" htmlFor="photo">{file.name}</label>
                   </div>
                 </div>
                 <div className="form-group mt-3" id="descriptionFields">
-                  <label htmlFor="inputDescription">Description</label>
+                  <label htmlFor="info">Description</label>
                   <br />
-                  <input type="text" className="form-control mb-2" onChange={(e) => setDescription(e.target.value)} value={description}/>
+                  <input name="info" type="text" className="form-control mb-2" onChange={(e) => setInfo(e.target.value)} value={info}/>
                 </div>
                 <div  className="d-flex justify-content-end">
                     <button

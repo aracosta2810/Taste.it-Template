@@ -73,7 +73,7 @@ const EditOffertModal = ({currentData}) => {
               <input type="text" name="title" className="form-control" onChange={(e) => setName(e.target.value)} value={name}/>
             </div>
             <div className="form-group">
-              <label htmlFor="inputClientCompany">Price</label>
+              <label htmlFor="price">Price</label>
               <div className="d-flex align-items-center">
                 <input
                   type="number"
@@ -90,7 +90,7 @@ const EditOffertModal = ({currentData}) => {
                     onChange={(e) => setIsEspecial(e.target.checked)} 
                     checked = {isEspecial}
                   />
-                  <label className="form-check-label" htmlFor="exampleCheck1">
+                  <label className="form-check-label" htmlFor="is_especial">
                     Special offer
                   </label>
                 </div>
@@ -99,13 +99,13 @@ const EditOffertModal = ({currentData}) => {
             <div className="input-group">
               <div className="custom-file">
                 <input type="file" name="photo" accept="image/*" onChange={(e) => handleChangePhoto(e.target.files[0])} className="custom-file-input" id="exampleInputFile" />
-                <label className="custom-file-label overflow-hidden" htmlFor="exampleInputFile">{urlPhoto}</label>
+                <label className="custom-file-label overflow-hidden" htmlFor="photo">{urlPhoto}</label>
               </div>
             </div>
             <div className="form-group mt-3">
-              <label htmlFor="inputDescription">Description</label>
+              <label htmlFor="info">Description</label>
               <br />
-              <input type="text" name="description" className="form-control mb-2" onChange={(e) => setInfo(e.target.value)} value={info}/>
+              <input type="text" name="info" className="form-control mb-2" onChange={(e) => setInfo(e.target.value)} value={info}/>
             </div>
             <div className="d-flex justify-content-end">
               <button type="submit" className="btn btn-success">

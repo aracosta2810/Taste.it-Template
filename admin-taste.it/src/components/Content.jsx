@@ -5,26 +5,25 @@ import Messages from "./sections/Messages/Messages";
 import Offers from "./sections/Offers/Offers";
 import Reservations from "./sections/Reservations/Reservations";
 import Home from "./sections/Home";
+import Error404 from "./Error404";
 
-const Content = () => {
+const Content = ({user}) => {
   return (
     <div className="hold-transition sidebar-mini">
       <div className="wrapper">
-        {/* Navbar */}
         <AppBar />
-        {/* /.navbar */}
-        {/* Main Sidebar Container */}
-        <SideBar />
+        <SideBar user={user}/>
 
         {/* Content Wrapper. Contains page content */}
         {/* Pages */}
         <div className="content-wrapper">
           <div className="px-0 px-sm-2 p-md-4">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home user={user}/>} />
               <Route path="offers" element={<Offers />} />
               <Route path="reservations" element={<Reservations />} />
               <Route path="messages" element={<Messages />} />
+              <Route path="*" element={<Error404 />} />
             </Routes>
           </div>
         </div>

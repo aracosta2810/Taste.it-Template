@@ -4,7 +4,7 @@ import EditOffertModal from "./EditOffertModal";
 import OffertModal from "./OffertModal";
 import AddOffertModal from "./AddOffertModal";
 import axios from "axios";
-import OffersTable from "./OffersTable";
+import OffersTable from "./OffersTable"; 
 
 const pic = 'https://www.cocinacaserayfacil.net/wp-content/uploads/2020/03/Platos-de-comida-que-pides-a-domicilio-y-puedes-hacer-en-casa-945x630.jpg'
 
@@ -49,7 +49,6 @@ const Offers = () => {
   };
 
   const handleDeleteModal = (datatoDelete) => {
-    console.log(datatoDelete);
     setDeleteModal(true);
     let newData = [...datatoDelete.filter((item) => item.isSelected === true)];
     setCurrentData(newData);
