@@ -11,7 +11,6 @@ const testData = [
     subject: "Mala atención",
     message: "Se demoran mucho en atenderte",
     date:'17-2-2022',
-    time:'08:30 pm',
   },
   {
     id: 2,
@@ -20,7 +19,6 @@ const testData = [
     subject: "Buena comida",
     message: "Excelente comida",
     date:'16-2-2022',
-    time:'08:30 pm',
   },
 ];
 
@@ -43,16 +41,17 @@ const Messages = () => {
       item.isSelected = false
     })
     setData(testData)
-    //--------------------------------
-    axios.get(`${window.urlServer}/contact`, { token: {} })
-      .then((res) => {
-        let data = res.data
 
-        data.forEach(item => item.isSelected = false)
-        setData(data)
-        // console.log(res);
-      })
-      .catch((e) => console.log("Error " + e));
+    //--------------------------------
+    // axios.get(`${window.urlServer}/contact`, { token: {} })
+    //   .then((res) => {
+    //     let data = res.data
+
+    //     data.forEach(item => item.isSelected = false)
+    //     setData(data)
+    //     // console.log(res);
+    //   })
+    //   .catch((e) => console.log("Error " + e));
   }, []);
 
   const handleViewMessageModal = (id) => {
@@ -99,6 +98,27 @@ const Messages = () => {
     setData(newData);
   }; 
   
+  const handleRefresh = () =>{
+    // testData.forEach(item => {
+    //   item.isSelected = false
+    // })
+    setData(null)
+
+
+    setData(testData)
+    console.log(data);
+
+    //--------------------------------
+    // axios.get(`${window.urlServer}/contact`, { token: {} })
+    //   .then((res) => {
+    //     let data = res.data
+
+    //     data.forEach(item => item.isSelected = false)
+    //     setData(data)
+    //     // console.log(res);
+    //   })
+    //   .catch((e) => console.log("Error " + e));
+  }
 
   return (
     <div
@@ -210,8 +230,8 @@ const Messages = () => {
           </div>
         </div>
        )}
-      {deleteModal? <DeleteModal currentData={currentData} url={`${window.urlServer}/contact/delete`} /> : null}
-      {messageModal? <MessageModal currentData={currentData}/> : null}
+      {deleteModal? <DeleteModal currentData={currentData} setData={setData} url={`${window.urlServer}/contact/delete`} /> : null}
+      {messageModal? <MessageModal currentData={currentData} setData={setData}/> : null}
     </div>
   );
 };

@@ -1,12 +1,14 @@
 import axios from "axios";
 
-const MessageModal = ({ currentData }) => {
+const MessageModal = ({ currentData, setData }) => {
   const handleDeleteData = async () => {
     // ! Hacer esto despues, empaquetar la infrmacion y tal. Falta el token
     axios
       .post(`${window.urlServer}/contact/delete`, {ids:[currentData.id], token: {} })
       .then((res) => console.log(res))
       .catch((e) => console.log(e));
+
+      setData(null)
 
     // fetch(`http://192.168.43.2:8080/taste-it/public/contact/delete`, {
     //   method:"DELETE",
@@ -56,6 +58,7 @@ const MessageModal = ({ currentData }) => {
               <button
                 onClick={handleDeleteData}
                 type="button"
+                data-dismiss="modal"
                 className="btn btn-default"
               >
                 <i className="far fa-trash-alt" /> Delete

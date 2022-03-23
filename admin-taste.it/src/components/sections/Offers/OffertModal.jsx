@@ -9,14 +9,14 @@ const OffertModal = ({currentData}) => {
                     <i className="fas fa-star mr-2" style={{color: currentData.is_especial === 1? 'yellow' : 'gray'}} />
                     {currentData.title} 
                   </h4>
-                  <div className="text-muted" style={{fontSize:'0.8rem'}}>{currentData.description}</div>
+                  <div className="text-muted" style={{fontSize:'0.8rem'}}>{currentData.info}</div>
                 </div>
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">×</span>
                 </button>
               </div>
               <div className="modal-body">
-                <img src={currentData.photo} alt="" width={'100%'} srcSet="" />
+                <img src={currentData.url_photo} alt="" width={'100%'} srcSet="" />
               </div>
             </div>
             {/* /.modal-content */}

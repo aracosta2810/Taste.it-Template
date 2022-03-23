@@ -2,38 +2,39 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 const EditOffertModal = ({currentData}) => {
-  const [nameField, setNameField] = useState('')
-  const [priceField, setPriceField] = useState(0)
+  const [type, setType] = useState('')
+  const [name, setName] = useState('')
+  const [price, setPrice] = useState(0)
   const [isEspecial, setIsEspecial] = useState(false)
+  const [urlPhoto, setUrlPhoto] = useState('')
   const [file, setFile] = useState('')
-  const [descriptionField, setDescriptionField] = useState(0)
+  const [info, setInfo] = useState(0)
 
   useEffect(() => {
-    setNameField(currentData.title)
-    setPriceField(currentData.price)
+    setType(currentData.type)
+    setName(currentData.title)
+    setPrice(currentData.price)
     setIsEspecial(currentData.is_especial === 1? true: false)
-    setFile(currentData.photo)
-    setDescriptionField(currentData.description)
+    setUrlPhoto(currentData.url_photo)
+    setInfo(currentData.info)
   }, [currentData])
   
   const handleEditData = async (e) => {
     e.preventDefault();
 
-    const data = {
-      title: nameField,
-      price: priceField,
-      // photo: file,
-      is_especial: isEspecial? 1 : 0,
-      description: descriptionField,
-      type:'Lunch',
-      token: ''
-  }
-  
+    let formData = new FormData(e.target)
+    formData.set('is_especial', formData.get('is_especial') === 'on'? 1 : 0)
+
     // ! Hacer esto despues, empaquetar la infrmacion y tal. Empaquetar el token
-    axios.put(`${window.urlServer}/offer/update/${currentData.id}`,data)
+    axios.put(`${window.urlServer}/offer/update/${currentData.id}`,formData)
     .then(res => console.log(res))
     .catch(e => console.log(e))
   };
+
+  const handleChangePhoto = (file) => {
+    setFile(file)
+    setUrlPhoto(file.name)
+  }
 
   return (
     <div
@@ -55,26 +56,37 @@ const EditOffertModal = ({currentData}) => {
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <form onSubmit={(e) => handleEditData(e)} className="modal-body">
+          <form onSubmit={(e) => handleEditData(e)} className="modal-body" encType="multipart">
+            <div className="form-group">
+                <label>Section</label>
+                <select name="type" onChange={(e) => setType(e.target.value)} className="form-control select2 select2-hidden-accessible" style={{width: '100%'}} data-select2-id={1} tabIndex={-1} aria-hidden="true">
+                  <option selected={currentData.type.toLowerCase() === 'breakfast'? true : false} data-select2-id={33}>Breakfast</option>
+                  <option selected={currentData.type.toLowerCase() === 'lunch'? true : false} data-select2-id={34}>Lunch</option>
+                  <option selected={currentData.type.toLowerCase() === 'dinner'? true : false} data-select2-id={35}>Dinner</option>
+                  <option selected={currentData.type.toLowerCase() === 'desserts'? true : false} data-select2-id={36}>Desserts</option>
+                  <option selected={currentData.type.toLowerCase() === 'wine card'? true : false} data-select2-id={37}>Wine Card</option>
+                  <option selected={currentData.type.toLowerCase() === 'drinks & tea'? true : false} data-select2-id={38}>Drinks {'&'} Tea</option>
+                </select>
+              </div>
             <div className="form-group">
               <label htmlFor="inputName">Name</label>
-              <input type="text" id="inputName" className="form-control" onChange={(e) => setNameField(e.target.value)} value={nameField}/>
+              <input type="text" name="title" className="form-control" onChange={(e) => setName(e.target.value)} value={name}/>
             </div>
             <div className="form-group">
               <label htmlFor="inputClientCompany">Price</label>
               <div className="d-flex align-items-center">
                 <input
                   type="number"
-                  id="priceField"
+                  name="price"
                   className="form-control w-25"
-                  onChange={(e) => setPriceField(e.target.value)} 
-                  value={priceField}
+                  onChange={(e) => setPrice(e.target.value)} 
+                  value={price}
                 />
                 <div className="form-check ml-4">
                   <input
                     type="checkbox"
                     className="form-check-input "
-                    id="exampleCheck1"
+                    name="is_especial"
                     onChange={(e) => setIsEspecial(e.target.checked)} 
                     checked = {isEspecial}
                   />
@@ -86,14 +98,14 @@ const EditOffertModal = ({currentData}) => {
             </div>
             <div className="input-group">
               <div className="custom-file">
-                <input type="file"  accept="image/*" onChange={(e) => setFile(e.target.files[0])} className="custom-file-input" id="exampleInputFile" />
-                <label className="custom-file-label" htmlFor="exampleInputFile">{file.name}</label>
+                <input type="file" name="photo" accept="image/*" onChange={(e) => handleChangePhoto(e.target.files[0])} className="custom-file-input" id="exampleInputFile" />
+                <label className="custom-file-label overflow-hidden" htmlFor="exampleInputFile">{urlPhoto}</label>
               </div>
             </div>
             <div className="form-group mt-3">
               <label htmlFor="inputDescription">Description</label>
               <br />
-              <input type="text" className="form-control mb-2" onChange={(e) => e.target.files.length === 0? '' : setFile(e.target.files[0])} value={descriptionField}/>
+              <input type="text" name="description" className="form-control mb-2" onChange={(e) => setInfo(e.target.value)} value={info}/>
             </div>
             <div className="d-flex justify-content-end">
               <button type="submit" className="btn btn-success">

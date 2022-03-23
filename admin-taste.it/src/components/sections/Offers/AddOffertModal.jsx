@@ -3,11 +3,14 @@ import { useState } from "react";
 
 const AddOffertModal = () => {
   //! Falta el de subir foto
-  const [nameField, setNameField] = useState('')
-  const [priceField, setPriceField] = useState(0)
+  const [type, setType] = useState('Breakfast')
+  const [title, setTitle] = useState('')
+  const [price, setPrice] = useState(0)
   const [isEspecial, setIsEspecial] = useState(false)
   const [file, setFile] = useState('')
-  const [descriptionField, setDescriptionField] = useState('')
+  const [description, setDescription] = useState('')
+
+  console.log(type);
 
     const handleAdd = async (e) => {
       e.preventDefault();
@@ -15,12 +18,12 @@ const AddOffertModal = () => {
       // console.log(file);
 
       const data = {
-        title: nameField,
-        price: priceField,
+        type: type,
+        title: title,
+        price: price,
         photo: file,
         is_especial: isEspecial,
-        description: descriptionField,
-        type:'Lunch',
+        description: description,
         token: {}
       }
 
@@ -32,10 +35,10 @@ const AddOffertModal = () => {
     }
 
     const cleanFields = () => {
-      setNameField('')
-      setPriceField(0)
+      setTitle('')
+      setPrice(0)
       setIsEspecial(false)
-      setDescriptionField('')
+      setDescription('')
     }
 
     return (
@@ -48,15 +51,27 @@ const AddOffertModal = () => {
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <form onSubmit={(e) => handleAdd(e)} className="modal-body">
+            <form onSubmit={(e) => handleAdd(e)} className="modal-body" encType="multipart">
+                <div className="form-group">
+                  <label>Section</label>
+                  <select onChange={(e) => setType(e.target.value)} className="form-control select2 select2-hidden-accessible" style={{width: '100%'}} data-select2-id={1} tabIndex={-1} aria-hidden="true">
+                    {/* <option selected="selected" data-select2-id={3}> </option> */}
+                    <option data-select2-id={33}>Breakfast</option>
+                    <option data-select2-id={34}>Lunch</option>
+                    <option data-select2-id={35}>Dinner</option>
+                    <option data-select2-id={36}>Desserts</option>
+                    <option data-select2-id={37}>Wine Card</option>
+                    <option data-select2-id={38}>Drinks {'&'} Tea</option>
+                  </select>
+                </div>
                 <div className="form-group">
                   <label htmlFor="inputName">Name</label>
-                  <input type="text" id="inputName" className="form-control" onChange={(e) => setNameField(e.target.value)} value={nameField} />
+                  <input type="text" id="inputName" className="form-control" onChange={(e) => setTitle(e.target.value)} value={title} />
                 </div>
                 <div className="form-group">
                   <label htmlFor="inputClientCompany">Price</label>
                   <div className="d-flex align-items-center">
-                    <input type="number" id="inputClientCompany" className="form-control w-25" onChange={(e) => setPriceField(e.target.value)} value={priceField} />
+                    <input type="number" id="inputClientCompany" className="form-control w-25" onChange={(e) => setPrice(e.target.value)} value={price} />
                     <div className="form-check ml-4">
                       <input type="checkbox" className="form-check-input " id="exampleCheck1" onChange={(e) => setIsEspecial(e.target.checked)} checked = {isEspecial}/>
                       <label className="form-check-label" htmlFor="exampleCheck1">Special offer</label>
@@ -73,7 +88,7 @@ const AddOffertModal = () => {
                 <div className="form-group mt-3" id="descriptionFields">
                   <label htmlFor="inputDescription">Description</label>
                   <br />
-                  <input type="text" className="form-control mb-2" onChange={(e) => setDescriptionField(e.target.value)} value={descriptionField}/>
+                  <input type="text" className="form-control mb-2" onChange={(e) => setDescription(e.target.value)} value={description}/>
                 </div>
                 <div  className="d-flex justify-content-end">
                     <button

@@ -24,17 +24,21 @@ const testData = [
 
 const Reservations = () => {
   const [data, setData] = useState(null);
+  const [toast, setToast] = useState(false);
 
   useEffect(() => {
-    // setData(testData);
-    axios.get(`${window.urlServer}/book-table`, {
-      token: localStorage.getItem('token')
-    })
-    .then(res => {
-      setData(res.data)
-      console.log(res);
-    })
-    .catch(e => console.log('Error: ' + e))
+    setData(testData);
+    
+    // axios.get(`${window.urlServer}/book-table`, {
+    //   token: localStorage.getItem('token')
+    // })
+    // .then(res => {
+    //   let data = res.data
+
+    //   data.forEach(item => item.isSelected = false)
+    //   setData(data)
+    // })
+    // .catch(e => console.log('Error: ' + e))
   }, []);
 
   const handleAcceptOrReject = async(accept) => {
@@ -44,13 +48,16 @@ const Reservations = () => {
       if (item.isSelected) ids.push(item.id);
     });
 
-    axios
-      .post(accept ? `${window.urlServer}/confirmate` : `${window.urlServer}/denegate`, {
-        ids: [...ids],
-        token: "",
-      })
-      .then((res) => console.log(res))
-      .catch((e) => console.log("Error: " + e));
+    setToast(true)
+    setTimeout(() => setToast(false), 2000)
+
+    // axios
+    //   .post(accept ? `${window.urlServer}/confirmate` : `${window.urlServer}/denegate`, {
+    //     ids: [...ids],
+    //     token: "",
+    //   })
+    //   .then((res) => console.log(res))
+    //   .catch((e) => console.log("Error: " + e));
   };
 
   const handleSelect = (id, selectAll) => {
@@ -103,6 +110,21 @@ const Reservations = () => {
       <h2 className="mt-4 text-center">There is nothing to show</h2>
     : (
     <div>
+
+      {
+        toast?
+          <div id="toastsContainerTopRight" className="toasts-top-right fixed">
+            <div className="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
+              <div className="toast-header"><strong className="mr-auto">Info</strong>
+                <button onClick={() => setToast(false)} data-dismiss="toast" type="button" className="ml-2 mb-1 close" aria-label="Close"><span aria-hidden="true">×</span>
+                </button></div><div className="toast-body">Lorem ipsum dolor sit amet, consetetur sadipscing elitr.
+              </div>
+            </div>
+          </div>
+        :
+          null
+      }
+
       <h3 className="mb-3 ml-3 ml-sm-0">Reservations Requests</h3>
       <div className="d-flex align-items-center  mb-3">
         <div className="ml-3 ml-sm-0">

@@ -2,30 +2,36 @@ import { useState, useEffect } from "react";
 import DeleteModal from "../DeleteModal";
 import EditOffertModal from "./EditOffertModal";
 import OffertModal from "./OffertModal";
-import pic from "./foto.jpg";
 import AddOffertModal from "./AddOffertModal";
 import axios from "axios";
+import OffersTable from "./OffersTable";
+
+const pic = 'https://www.cocinacaserayfacil.net/wp-content/uploads/2020/03/Platos-de-comida-que-pides-a-domicilio-y-puedes-hacer-en-casa-945x630.jpg'
 
 const offers = [
-  {
-    id: 1,
-    title: "Pizza",
-    price: 12.4,
-    photo: pic,
-    is_especial: 1,
-    description: "Cheese and tomatoes",
-    isSelected: false,
-  },
-  {
-    id: 2,
-    title: "Rice and Meat",
-    price: 25.4,
-    photo: pic,
-    is_especial: 0,
-    description: "With meat",
-    isSelected: false,
-  },
-];
+  {section:'Breakfast', offers: [
+    {id: 1, 
+      url_photo: pic, title: 'Pizza', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
+    {id: 2, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 0},
+  ]},
+  {section:'Lunch', offers: [
+    {id: 4, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
+  ]},
+  {section:'Dinner', offers: [
+    {id: 7, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 0},
+    {id: 9, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
+  ]},
+  {section:'Desserts', offers: [
+    {id: 10, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
+  ]},
+  {section:'Wine Card', offers: [
+    {id: 11, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 0},
+  ]},
+  {section:'Drinks & Tea', offers: [
+    {id: 12, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
+  ]},
+]
+
 
 const Offers = () => {
   const [data, setData] = useState(null);
@@ -37,18 +43,27 @@ const Offers = () => {
 
   const handleViewModal = (id, modal) => {
     modal(true);
-    setCurrentData(...offers.filter((item) => item.id === id));
+    data.forEach(item => {
+      item.offers.forEach(item2 => item2.id === id? setCurrentData(item2) : null)
+    })
   };
 
-  const handleDeleteModal = () => {
+  const handleDeleteModal = (datatoDelete) => {
+    console.log(datatoDelete);
     setDeleteModal(true);
-    let newData = [...data.filter((item) => item.isSelected === true)];
+    let newData = [...datatoDelete.filter((item) => item.isSelected === true)];
     setCurrentData(newData);
   };
 
   //?Poner url bien cuando lo vayas a probar bien
   //*  La url es: sitioweb.com/
   useEffect(() => {
+    offers.forEach(item => {
+      item.offers.forEach(item2 => {
+        item2.isSelected = false
+      })
+    })
+
     setData(offers);
     // axios
     //   .get("https://jsonplaceholder.typicode.com/users",{token:{}})
@@ -56,44 +71,25 @@ const Offers = () => {
     //   .catch((e) => console.log("Error " + e));
   }, []);
 
-  const handleSelect = (id, selectAll) => {
-    let newData = [];
-    let allSelect = false;
 
-    if (selectAll) {
-      data.forEach((item) => {
-        if (item.isSelected === false) {
-          allSelect = true;
-        }
-      });
+  const handleRefresh = () =>{
+    // testData.forEach(item => {
+    //   item.isSelected = false
+    // })
+    setData(offers)
+    console.log(data);
 
-      switch (allSelect) {
-        case true:
-          data.forEach((item) => {
-            item.isSelected = true;
-            newData.push(item);
-          });
-          break;
+    //--------------------------------
+    // axios.get(`${window.urlServer}/contact`, { token: {} })
+    //   .then((res) => {
+    //     let data = res.data
 
-        case false:
-          data.forEach((item) => {
-            item.isSelected = false;
-            newData.push(item);
-          });
-          break;
-
-        default:
-          break;
-      }
-    } else {
-      data.forEach((item) => {
-        if (item.id === id) item.isSelected = !item.isSelected;
-        newData.push(item);
-      });
-    }
-
-    setData(newData);
-  };
+    //     data.forEach(item => item.isSelected = false)
+    //     setData(data)
+    //     // console.log(res);
+    //   })
+    //   .catch((e) => console.log("Error " + e));
+  }
 
   return (
     <div
@@ -110,103 +106,50 @@ const Offers = () => {
           <i className="fas fa-2x fa-sync-alt fa-spin mt-5"></i>
         </div>
       ) : (
-        <div className="card card-info">
-          <div className="card-header">
-            <h3 className="card-title">Menu</h3>
-            <div className="card-tools">
-              <button
-                onClick={() => setAddOffertModal(true)}
-                className="btn btn-sm btn-dark mr-3"
-                data-toggle="modal"
-                data-target="#modal-addOffertModal"
-              >
-                <i className="fa fa-plus"></i>
-              </button>
-              <button
-                onClick={() => handleSelect(null, true)}
-                type="button"
-                className="btn btn-default btn-sm mr-3 checkbox-toggle"
-              >
-                <i className="far fa-check-square " />
-              </button>
-              <button
-                onClick={() => handleDeleteModal()}
-                className={`btn btn-sm btn-danger`}
-                data-toggle="modal"
-                data-target="#modal-deleteModal"
-                disabled={data.filter(item => item.isSelected).length === 0}
-              >
-                <i className="fas fa-trash" />
-              </button>
-            </div>
+        <div className="card card-primary card-outline card-outline-tabs">
+          <div className="card-header p-0 border-bottom-0">
+            <ul className="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+              <li className="px-3 d-flex align-items-center"><h3 className="card-title">Menu</h3></li>
+              {
+                data.map((item, key) => 
+                  <li className="nav-item" key={key}>
+                    <a className={`nav-link ${item.section === data[0].section? 'active' : ''}`} data-toggle="pill" href={`#${item.section === 'Wine Card'? 'winecard' : item.section === 'Drinks & Tea'? 'drinks' : item.section}`} role="tab" aria-controls="custom-tabs-three-home" aria-selected="false">
+                      {item.section}
+                    </a>
+                  </li>
+                )
+              }
+            </ul>
           </div>
           <div className="card-body p-0">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item) => (
-                  <tr key={item.id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        className="pointer"
-                        defaultValue
-                        checked={item.isSelected}
-                        onChange={(e) => handleSelect(item.id, false)}
-                        id={item.id}
-                      />
-                      <i
-                        className="fas fa-star mx-2"
-                        style={{
-                          color: item.is_especial === 1 ? "yellow" : "gray",
-                        }}
-                      />
-                      {item.title}
-                    </td>
-                    <td>{item.price} </td>
-                    <td className="text-right py-0 align-middle">
-                      <div className="btn-group btn-group-sm">
-                        <button
-                          onClick={() =>
-                            handleViewModal(item.id, setOffertModal)
-                          }
-                          href="/"
-                          className="btn btn-dark"
-                          data-toggle="modal"
-                          data-target="#modal-offertModal"
-                        >
-                          <i className="fas fa-eye" />
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleViewModal(item.id, setEditOffertModal)
-                          }
-                          className="btn btn-info"
-                          data-toggle="modal"
-                          data-target="#modal-editOffertModal"
-                        >
-                          <i className="fas fa-edit" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {/* /.card-body */}
+            <div className="tab-content" id="custom-tabs-three-tabContent">
+              {
+                data.map((item, key) => 
+                  <div key={key} className={`tab-pane fade ${item.section === data[0].section? 'active show' : ''}`} id={item.section === 'Wine Card'? 'winecard' : item.section === 'Drinks & Tea'? 'drinks' : item.section} role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
+                    <OffersTable
+                      section={item.section} 
+                      offers={item.offers} 
+                      setData={setData}
+                      setAddOffertModal={setAddOffertModal} 
+                      handleDeleteModal={handleDeleteModal} 
+                      handleViewModal={handleViewModal}
+                      setOffertModal={setOffertModal}
+                      setEditOffertModal={setEditOffertModal}
+                    />
+                  </div>
+                )
+              }
+            </div>
+          </div> 
+          {/* /.card */}
         </div>
-      )}
-
+      )} 
+        
+      
       {offertModal ? <OffertModal currentData={currentData} /> : null}
-      {addOffertModal ? <AddOffertModal currentData={currentData} /> : null}
-      {editOffertModal ? <EditOffertModal currentData={currentData} /> : null}
-      {deleteModal ? <DeleteModal currentData={currentData} url={`${window.urlServer}/offer/delete`}/> : null}
+      {addOffertModal ? <AddOffertModal  /> : null}
+      {editOffertModal && currentData.title !== undefined  ? <EditOffertModal currentData={currentData} /> : null}
+      {deleteModal ? <DeleteModal currentData={currentData} setData={setData} url={`${window.urlServer}/offer/delete`}/> : null}
     </div>
   );
 };
