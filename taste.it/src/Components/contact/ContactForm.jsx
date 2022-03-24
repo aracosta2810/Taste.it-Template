@@ -17,7 +17,7 @@ const ContactForm = () => {
         }
         console.log(data);
         // return
-      axios.post(`${window.urlServer}/contact/create`,data)
+      axios.post(`${window.urlServer}contact/create`,data)
       .then(res => console.log(res))
       .catch(e => console.log("Error: " + e))
     }

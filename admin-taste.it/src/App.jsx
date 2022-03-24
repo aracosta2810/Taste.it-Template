@@ -1,10 +1,9 @@
 import './App.css';
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Login from './components/Login';
 import Content from './components/Content';
 import axios from 'axios';
-import Error404 from './components/Error404';
 
 
 const data = {user:'adrian', password:'1234'}
@@ -24,41 +23,49 @@ function App() {
         return
       }
 
-      try {
-        const data = await axios.get(window.urlServer, {token: localStorage.getItem('token')})
-        if (data.success) {
-          setUser({name: 'Adrian', isSuperUser: true})//Revisar donde van a mandar el user
-          setIsLogin(true)
-          // setUser({name: 'Yordanis', isSuperUser: false})
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      // try {
+      //   const data = await axios.get(window.urlServer, {token: localStorage.getItem('token')})
+      //   if (data.success) {
+      //     setUser({name: 'Adrian', isSuperUser: true})//Revisar donde van a mandar el user
+      //     setIsLogin(true)
+      //     // setUser({name: 'Yordanis', isSuperUser: false})
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
 
       setIsLogin(true)
-      setUser({name: 'Adrian', isSuperUser: true})
+      setUser({name: 'Yordanis', isSuperUser: true})
       // setUser({name: 'Yordanis', isSuperUser: false})
     }
 
     cargarUsuario()
 
+    return
     axios.get(window.urlServer)
     .then(res => console.log(res))
     .catch(e => console.log(e))
-
-    // fetch('http://192.168.2.241:8080/taste-it/public')
-    // .then(res => console.log(res))
-    // .catch(e => console.log(e))
 
   }, [])
   
   const handleLogin = (e) => {//Modificar para pedir autenticacion al back
     e.preventDefault();
-    if (e.target.user.value === data.user && e.target.pass.value === data.password){
-      setUser({name: 'Adrian', isSuperUser: true})
-      setIsLogin(true)
-      localStorage.setItem('token', e.target.user.value +'ADSDA' + e.target.pass.value + 'dsadf')
+
+    let data = {
+      name: e.target.user.value ,
+      password: e.target.pass.value
     }
+    
+    axios.post(window.urlServer+'login', data)
+    .then(res => {
+      setIsLogin(true)
+      localStorage.setItem('token', res.data.token)
+    })
+    .catch(e => console.log(e))
+
+    // setUser({name: 'Adrian', isSuperUser: true})
+    // setIsLogin(true)
+    // localStorage.setItem('token', e.target.user.value +'ADSDA' + e.target.pass.value + 'dsadf')
 }
 
   return (
@@ -69,6 +76,7 @@ function App() {
           :
             <Login handleLogin={handleLogin}/>
        }
+
     </BrowserRouter>
   );
 }

@@ -1,39 +1,59 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const EditOffertModal = ({currentData}) => {
+const EditOffertModal = ({currentData, setData}) => {
   const [type, setType] = useState('')
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0)
   const [isEspecial, setIsEspecial] = useState(false)
-  const [urlPhoto, setUrlPhoto] = useState('')
-  const [file, setFile] = useState('')
-  const [info, setInfo] = useState(0)
+  const [photo, setPhoto] = useState('')
+  const [description, setDescription] = useState(0)
 
   useEffect(() => {
     setType(currentData.type)
     setName(currentData.title)
     setPrice(currentData.price)
     setIsEspecial(currentData.is_especial === 1? true: false)
-    setUrlPhoto(currentData.url_photo)
-    setInfo(currentData.info)
+    setPhoto(window.urlServer+'storage/'+currentData.url_photo)
+    setDescription(currentData.description)
   }, [currentData])
   
   const handleEditData = async (e) => {
     e.preventDefault();
 
-    let formData = new FormData(e.target)
+    let formData = new FormData(e.target.form)
     formData.set('is_especial', formData.get('is_especial') === 'on'? 1 : 0)
 
+    // formData.forEach(item => {
+    //   console.log(item);
+    // })
+    // console.log('-------------------');
+
+    setData(null)
     // ! Hacer esto despues, empaquetar la infrmacion y tal. Empaquetar el token
-    axios.put(`${window.urlServer}/offer/update/${currentData.id}`,formData)
-    .then(res => console.log(res))
+    axios.post(`${window.urlServer}offer/update/${currentData.id}`,formData)
+    .then(res => {
+      if (!res.data.success) {
+        // console.log('Hubo un error al agregar la oferta: ' + res.data.message);
+        console.log(res);
+        return
+      }
+      // console.log(res);
+      let newData = res.data.data;
+
+      newData.forEach((item) => {
+        item.offers.forEach((item2) => {
+          item2.isSelected = false;
+        });
+      });
+      setData(newData);
+    })
     .catch(e => console.log(e))
   };
 
   const handleChangePhoto = (file) => {
-    setFile(file)
-    setUrlPhoto(file.name)
+    // setPhoto(file)
+    // console.log(file);
   }
 
   return (
@@ -56,7 +76,7 @@ const EditOffertModal = ({currentData}) => {
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <form onSubmit={(e) => handleEditData(e)} className="modal-body" encType="multipart">
+          <form id="form" className="modal-body" encType="multipart/form-data">
             <div className="form-group">
                 <label>Section</label>
                 <select name="type" onChange={(e) => setType(e.target.value)} className="form-control select2 select2-hidden-accessible" style={{width: '100%'}} data-select2-id={1} tabIndex={-1} aria-hidden="true">
@@ -96,19 +116,21 @@ const EditOffertModal = ({currentData}) => {
                 </div>
               </div>
             </div>
+            {/*-----------------------Offer picture--------------------  */}
+            <img src={photo} width="100%" alt="Offer pic" />
             <div className="input-group">
               <div className="custom-file">
                 <input type="file" name="photo" accept="image/*" onChange={(e) => handleChangePhoto(e.target.files[0])} className="custom-file-input" id="exampleInputFile" />
-                <label className="custom-file-label overflow-hidden" htmlFor="photo">{urlPhoto}</label>
+                <label className="custom-file-label overflow-hidden" htmlFor="photo">New photo</label>
               </div>
             </div>
             <div className="form-group mt-3">
-              <label htmlFor="info">Description</label>
+              <label htmlFor="description">Description</label>
               <br />
-              <input type="text" name="info" className="form-control mb-2" onChange={(e) => setInfo(e.target.value)} value={info}/>
+              <input type="text" name="description" className="form-control mb-2" onChange={(e) => setDescription(e.target.value)} value={description}/>
             </div>
             <div className="d-flex justify-content-end">
-              <button type="submit" className="btn btn-success">
+              <button type="button" onClick={(e) => handleEditData(e)} className="btn btn-success" data-dismiss="modal">
                 <i className="fas fa-save mr-2" />
                 Save
               </button>    

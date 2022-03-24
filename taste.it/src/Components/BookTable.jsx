@@ -28,7 +28,7 @@ const BookTable = () => {
     
     console.log(data);
 
-    axios.post(`${window.urlServer}/book-table/create`,data)
+    axios.post(`${window.urlServer}book-table/create`,data)
     .then(res => console.log(res))
     .catch(e => console.log("Ha habido un error " + e))
 

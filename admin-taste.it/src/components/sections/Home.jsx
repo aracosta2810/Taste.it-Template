@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import NewAdminForm from "../NewAdminForm";
 
 const sections = [
   {
@@ -29,9 +31,11 @@ const sections = [
 //   "email": ''
 // }
 const Home = ({ user }) => {
+  const [newAdminModal, setNewAdminModal] = useState(false)
+
   const AdminRegistration = () => {
     return (
-      <div className="col-lg-3 col-6">
+      <div className="col-lg-3 col-12 col-sm-6">
         <div className='small-box bg-gradient-info'>
           <div className="inner">
             <h4 className="mb-5">Admin Registration</h4>
@@ -39,7 +43,7 @@ const Home = ({ user }) => {
           <div className="icon">
             <i className='fa fa-user-plus'></i>
           </div>
-          <div className="small-box-footer" style={{cursor:'pointer'}}>
+          <div onClick={() => setNewAdminModal(true)} data-toggle="modal" data-target="#modal-NewAdminModal"  className="small-box-footer" style={{cursor:'pointer'}}>
             Go to <i className="fas fa-arrow-circle-right" />
           </div>
         </div>
@@ -53,7 +57,7 @@ const Home = ({ user }) => {
       <div className="row">
         {user !== null && user.isSuperUser ? <AdminRegistration /> : null}
         {sections.map((item, key) => (
-          <div key={key} className="col-lg-3 col-6">
+          <div key={key} className="col-lg-3 col-12 col-sm-6">
             <div className={`small-box ${item.color}`}>
               <div className="inner">
                 <h4 className="mb-5">{item.title}</h4>
@@ -68,6 +72,8 @@ const Home = ({ user }) => {
           </div>
         ))}
       </div>
+
+      {newAdminModal? <NewAdminForm/> : null}
     </div>
   );
 };

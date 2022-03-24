@@ -37,23 +37,21 @@ const Messages = () => {
   //?Poner url bien cuando lo vayas a probar bien
   //*/contact
   useEffect(() => {
-    testData.forEach(item => {
-      item.isSelected = false
-    })
-    setData(testData)
+    // testData.forEach(item => {
+    //   item.isSelected = false
+    // })
+    // setData(testData)
 
-    return
     //--------------------------------
-    axios.get(`${window.urlServer}/contact`, { token: {} })
+    axios.get(`${window.urlServer}contact`, { token: {} })
       .then((res) => {
         let data = res.data
-
+        
         data.forEach(item => item.isSelected = false)
         setData(data)
-        // console.log(res);
       })
       .catch((e) => console.log("Error " + e));
-  }, []);
+    }, []);
 
   const handleViewMessageModal = (id) => {
     setMessageModal(true);
@@ -231,7 +229,7 @@ const Messages = () => {
           </div>
         </div>
        )}
-      {deleteModal? <DeleteModal currentData={currentData} setData={setData} url={`${window.urlServer}/contact/delete`} /> : null}
+      {deleteModal? <DeleteModal currentData={currentData} setData={setData} url={`${window.urlServer}contact/delete`} /> : null}
       {messageModal? <MessageModal currentData={currentData} setData={setData}/> : null}
     </div>
   );

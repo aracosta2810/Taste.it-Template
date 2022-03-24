@@ -27,10 +27,9 @@ const Reservations = () => {
   const [toast, setToast] = useState(false);
 
   useEffect(() => {
-    setData(testData);
+    // setData(testData);
     
-    return
-    axios.get(`${window.urlServer}/book-table`, {
+    axios.get(`${window.urlServer}book-table`, {
       token: localStorage.getItem('token')
     })
     .then(res => {
@@ -49,16 +48,16 @@ const Reservations = () => {
       if (item.isSelected) ids.push(item.id);
     });
 
-    setToast(true)
-    setTimeout(() => setToast(false), 2000)
+    // setToast(true)
+    // setTimeout(() => setToast(false), 2000)
 
-    // axios
-    //   .post(accept ? `${window.urlServer}/confirmate` : `${window.urlServer}/denegate`, {
-    //     ids: [...ids],
-    //     token: "",
-    //   })
-    //   .then((res) => console.log(res))
-    //   .catch((e) => console.log("Error: " + e));
+    axios
+      .post(accept ? `${window.urlServer}book-table/confirmate` : `${window.urlServer}book-table/denegate`, {
+        ids: [...ids],
+        token: "",
+      })
+      .then((res) => console.log(res))
+      .catch((e) => console.log("Error: " + e));
   };
 
   const handleSelect = (id, selectAll) => {
@@ -174,12 +173,11 @@ const Reservations = () => {
               <div className="info-box-content">
                 <span className="info-box-text">
                   <b>{item.name}</b>
-                  <span className="ml-2">
-                    {item.check_in} <span className="ml-2">{item.time}</span>
-                  </span>
                 </span>
                 <span className="info-box-text">Guest: {item.guest}</span>
-                <span className="">
+                <span className=" d-flex">
+                  {item.check_in} <span className="ml-2">{item.time}</span>
+                </span><span className="">
                   {item.email}
                 </span>
               </div>

@@ -6,7 +6,7 @@ import AddOffertModal from "./AddOffertModal";
 import axios from "axios";
 import OffersTable from "./OffersTable"; 
 
-const pic = 'https://www.cocinacaserayfacil.net/wp-content/uploads/2020/03/Platos-de-comida-que-pides-a-domicilio-y-puedes-hacer-en-casa-945x630.jpg'
+const pic = 'http://192.168.43.2:8080/taste-it/public/storage/uploads/foto.jpg'
 
 const offers = [
   {section:'Breakfast', offers: [
@@ -54,8 +54,6 @@ const Offers = () => {
     setCurrentData(newData);
   };
 
-  //?Poner url bien cuando lo vayas a probar bien
-  //*  La url es: sitioweb.com/
   useEffect(() => {
     offers.forEach(item => {
       item.offers.forEach(item2 => {
@@ -63,11 +61,21 @@ const Offers = () => {
       })
     })
 
-    setData(offers);
-    // axios
-    //   .get("https://jsonplaceholder.typicode.com/users",{token:{}})
-    //   .then((res) => setData(res.data))
-    //   .catch((e) => console.log("Error " + e));
+    // setData(offers);
+    axios
+      .get(window.urlServer,{token:{}})
+      .then((res) => {
+        // console.log(res);
+        let newData = res.data
+
+        newData.forEach(item => {
+          item.offers.forEach(item2 => {
+            item2.isSelected = false
+          })
+        })
+        setData(newData)
+      })
+      .catch((e) => console.log("Error " + e));
   }, []);
 
 
@@ -146,9 +154,9 @@ const Offers = () => {
         
       
       {offertModal ? <OffertModal currentData={currentData} /> : null}
-      {addOffertModal ? <AddOffertModal  /> : null}
-      {editOffertModal && currentData.title !== undefined  ? <EditOffertModal currentData={currentData} /> : null}
-      {deleteModal ? <DeleteModal currentData={currentData} setData={setData} url={`${window.urlServer}/offer/delete`}/> : null}
+      {addOffertModal ? <AddOffertModal setData={setData} /> : null}
+      {editOffertModal && currentData.title !== undefined  ? <EditOffertModal currentData={currentData} setData={setData}/> : null}
+      {deleteModal ? <DeleteModal currentData={currentData} setData={setData} url={`${window.urlServer}offer/delete`}/> : null}
     </div>
   );
 };

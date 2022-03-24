@@ -25,11 +25,11 @@ const EspecialOffers = () => {
                 </div>
                   {
                     item.offers.map((item2, key) => 
-                      (item2.isEspecial === 1)?
+                      (item2.is_especial === 1)?
                       <div key={key} className={`menus d-flex ${item.offers[item.offers.length-1] === item2? "border-bottom-0" : ""}`  }>
                         <div
                           className="menu-img img"
-                          style={{ backgroundImage: `url(${process.env.PUBLIC_URL + `/assets/images/${item2.urlImg}`})` }}
+                          style={{ backgroundImage: `url(${window.urlServer + 'storage/' +item2.url_photo})` }}
                         />
                         <div className="text">
                           <div className="d-flex">
@@ -41,15 +41,15 @@ const EspecialOffers = () => {
                             </div>
                           </div>
                           <p>
-                            {item2.info}
+                            {item2.description}
                           </p>
                         </div>
                       </div>:
                       null
                     )
                   }
-                <span className={`flat ${item.icons[0]}`} style={{ left: 0 }} />
-                <span className={`flat ${item.icons[1]}`} style={{ right: 0 }} />
+                {/* <span className={`flat ${item.icons[0]}`} style={{ left: 0 }} />
+                <span className={`flat ${item.icons[1]}`} style={{ right: 0 }} /> */}
               </div>
             </div>
             )

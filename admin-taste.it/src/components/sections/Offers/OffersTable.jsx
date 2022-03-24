@@ -7,7 +7,7 @@ const OffersTable = ({section, offers, setAddOffertModal, handleDeleteModal, han
         let newData = data
 
         newData.forEach(item=> item.type = section)
-
+        // console.log(data);
         setData(newData)
     },[data,section])
 

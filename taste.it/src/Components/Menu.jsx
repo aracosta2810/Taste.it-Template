@@ -3,6 +3,7 @@ import { selectOffers } from "../Redux/OffersSlice";
 
 const Menu = () => {
     const data = useSelector(selectOffers)
+    console.log(data);
 
     return (
         <section className="ftco-section">
@@ -26,7 +27,7 @@ const Menu = () => {
                       <div key={key} className={`menus d-flex ${item.offers[item.offers.length-1] === item2? "border-bottom-0" : ""}`  }>
                         <div
                           className="menu-img img"
-                          style={{ backgroundImage: `url(${process.env.PUBLIC_URL + `/assets/images/${item2.urlImg}`})` }}
+                          style={{ backgroundImage: `url(${window.urlServer + 'storage/' +item2.url_photo})` }}
                         />
                         <div className="text">
                           <div className="d-flex">
@@ -38,14 +39,14 @@ const Menu = () => {
                             </div>
                           </div>
                           <p>
-                            {item2.info}
+                            {item2.description}
                           </p>
                         </div>
                       </div>
                     )
                   }
-                <span className={`flat ${item.icons[0]}`} style={{ left: 0 }} />
-                <span className={`flat ${item.icons[1]}`} style={{ right: 0 }} />
+                {/* <span className={`flat ${item.icons[0]}`} style={{ left: 0 }} />
+                <span className={`flat ${item.icons[1]}`} style={{ right: 0 }} /> */}
               </div>
             </div>
             )
