@@ -4,15 +4,15 @@ import SideBar from "./SideBar";
 import Messages from "./sections/Messages/Messages";
 import Offers from "./sections/Offers/Offers";
 import Reservations from "./sections/Reservations/Reservations";
-import Home from "./sections/Home";
 import Error404 from "./Error404";
+import Home from "./Home/Home";
 
-const Content = ({user}) => {
+const Content = ({user, setIsLogin}) => {
   return (
     <div className="hold-transition sidebar-mini">
       <div className="wrapper">
-        <AppBar />
-        <SideBar user={user}/>
+        <AppBar user={user} setIsLogin={setIsLogin}/>
+        <SideBar />
 
         {/* Content Wrapper. Contains page content */}
         {/* Pages */}

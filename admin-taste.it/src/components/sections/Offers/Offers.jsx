@@ -5,6 +5,7 @@ import OffertModal from "./OffertModal";
 import AddOffertModal from "./AddOffertModal";
 import axios from "axios";
 import OffersTable from "./OffersTable"; 
+import Toast from "../../Toast";
 
 const pic = 'http://192.168.43.2:8080/taste-it/public/storage/uploads/foto.jpg'
 
@@ -34,6 +35,7 @@ const offers = [
 
 
 const Offers = () => {
+  const [toast, setToast] = useState(false)
   const [data, setData] = useState(null);
   const [currentData, setCurrentData] = useState({});
   const [offertModal, setOffertModal] = useState(false);
@@ -63,7 +65,7 @@ const Offers = () => {
 
     // setData(offers);
     axios
-      .get(window.urlServer,{token:{}})
+      .get(window.urlServer)
       .then((res) => {
         // console.log(res);
         let newData = res.data
@@ -120,7 +122,7 @@ const Offers = () => {
               {
                 data.map((item, key) => 
                   <li className="nav-item" key={key}>
-                    <a className={`nav-link ${item.section === data[0].section? 'active' : ''}`} data-toggle="pill" href={`#${item.section === 'Wine Card'? 'winecard' : item.section === 'Drinks & Tea'? 'drinks' : item.section}`} role="tab" aria-controls="custom-tabs-three-home" aria-selected="false">
+                    <a className={`nav-link ${item.section === data[0].section? 'active' : ''}`} data-toggle="pill" href={`#${item.section.toLowerCase() === 'wine card'? 'winecard' : item.section.toLowerCase() === 'drinks & tea'? 'drinks' : item.section}`} role="tab" aria-controls="custom-tabs-three-home" aria-selected="false">
                       {item.section}
                     </a>
                   </li>
@@ -132,7 +134,7 @@ const Offers = () => {
             <div className="tab-content" id="custom-tabs-three-tabContent">
               {
                 data.map((item, key) => 
-                  <div key={key} className={`tab-pane fade ${item.section === data[0].section? 'active show' : ''}`} id={item.section === 'Wine Card'? 'winecard' : item.section === 'Drinks & Tea'? 'drinks' : item.section} role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
+                  <div key={key} className={`tab-pane fade ${item.section === data[0].section? 'active show' : ''}`} id={item.section.toLowerCase() === 'wine card'? 'winecard' : item.section.toLowerCase() === 'drinks & tea'? 'drinks' : item.section} role="tabpanel" aria-labelledby="custom-tabs-three-home-tab">
                     <OffersTable
                       section={item.section} 
                       offers={item.offers} 
@@ -156,7 +158,14 @@ const Offers = () => {
       {offertModal ? <OffertModal currentData={currentData} /> : null}
       {addOffertModal ? <AddOffertModal setData={setData} /> : null}
       {editOffertModal && currentData.title !== undefined  ? <EditOffertModal currentData={currentData} setData={setData}/> : null}
-      {deleteModal ? <DeleteModal currentData={currentData} setData={setData} url={`${window.urlServer}offer/delete`}/> : null}
+      {deleteModal ? <DeleteModal currentData={currentData} setToast={setToast} setData={setData} url={`${window.urlServer}offer/delete`}/> : null}
+      
+      {
+        toast?
+          <Toast message={'Offer(s) deleted successfully'} setToast={setToast}/>
+        :
+          null
+      }
     </div>
   );
 };

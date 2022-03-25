@@ -15,7 +15,7 @@ const ContactForm = () => {
           subject: e.target.subject.value,
           message: e.target.message.value,
         }
-        console.log(data);
+        // console.log(data);
         // return
       axios.post(`${window.urlServer}contact/create`,data)
       .then(res => console.log(res))

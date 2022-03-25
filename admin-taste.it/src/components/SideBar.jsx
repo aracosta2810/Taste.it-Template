@@ -8,13 +8,13 @@ const sections = [
   {url:'/messages', title: 'Messages'},
 ]
 
-const SideBar = ({user}) => {
+const SideBar = () => {
     const route = useLocation()
 
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4" style={{height:'100vh'}}>
         {/* Brand Logo */}
-        <Link to="/" className="brand-link">
+        <div className="brand-link">
           <img
             src={process.env.PUBLIC_URL + 'favicon.ico'}
             alt="AdminLTE Logo"
@@ -23,8 +23,8 @@ const SideBar = ({user}) => {
             height={100}
             style={{ opacity: ".8" }}
           />
-          <span className="brand-text font-weight-light">{user === null? '' : user.name}</span>
-        </Link>
+          <span className="brand-text font-weight-light"><b>Taste-it.</b>Admin</span>
+        </div>
         {/* Sidebar */}
         <div className="sidebar">
           {/* Sidebar user panel (optional) */}

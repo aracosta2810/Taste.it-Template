@@ -27,8 +27,6 @@ function App() {
       // console.log(res.data);
     })
     .catch(e => console.log("Error: "+e))
-    setLoadingInfo(false)
-
   },[])
 
   return (

@@ -11,32 +11,38 @@ const data = {user:'adrian', password:'1234'}
 // Axios.interceptors.request.use
 
 function App() {
+  const [loading, setLoading] = useState(true)
   const [isLogin, setIsLogin] = useState(false)
   const [user, setUser] = useState(null)
-  // sessionStorage.setItem("token", "dasd787dsa8d")
-  // sessionStorage.clear()
 
   useEffect(() => {
     async function cargarUsuario(){
       if (localStorage.getItem('token') === null) {
+        setLoading(false)
         setIsLogin(false)
         return
       }
 
-      // try {
-      //   const data = await axios.get(window.urlServer, {token: localStorage.getItem('token')})
-      //   if (data.success) {
-      //     setUser({name: 'Adrian', isSuperUser: true})//Revisar donde van a mandar el user
-      //     setIsLogin(true)
-      //     // setUser({name: 'Yordanis', isSuperUser: false})
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
-
-      setIsLogin(true)
-      setUser({name: 'Yordanis', isSuperUser: true})
-      // setUser({name: 'Yordanis', isSuperUser: false})
+      // Ver si hay algun usuario logueado
+      try {
+        const res = await axios.post(window.urlServer+'user', {}, {headers:  {'Authorization' : 'Bearer '+localStorage.getItem('token')}})
+        console.log(res.data);
+        
+        setLoading(false)
+        if (res.data.success) {
+          setIsLogin(true)
+          setUser(res.data.user)
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+      
+      // setIsLogin(true)
+      // setUser({
+      //   name: 'Adrian', 
+      //   isSuperAdmin: true
+      // })
     }
 
     cargarUsuario()
@@ -52,14 +58,19 @@ function App() {
     e.preventDefault();
 
     let data = {
-      name: e.target.user.value ,
+      email: e.target.user.value ,
       password: e.target.pass.value
     }
     
-    axios.post(window.urlServer+'login', data)
+    axios.post(window.urlServer+'admin/login', data)
     .then(res => {
+      if(!res.data.success) {
+        console.log(res);
+        return
+      }
       setIsLogin(true)
       localStorage.setItem('token', res.data.token)
+      setUser(res.data.user)
     })
     .catch(e => console.log(e))
 
@@ -71,10 +82,21 @@ function App() {
   return (
     <BrowserRouter >
        {
-         isLogin ?
-            <Content user={user}/>
-          :
-            <Login handleLogin={handleLogin}/>
+         loading? (
+          <div className="d-flex justify-content-center align-items-center" style={{ fontSize: "1.5rem", height:'100vh' }}>
+            <div>
+              <p className='display-4'><b>Taste.it</b>- Admin</p>
+              <div className='d-flex justify-content-center'>
+                <i className="fas fa-2x fa-sync-alt fa-spin mt-3 align-self-center"></i>
+              </div>
+            </div>
+          </div>
+         ) : isLogin && user !== null ? (
+          <Content user={user} setIsLogin={setIsLogin}/>
+         ) : (
+          <Login handleLogin={handleLogin}/>
+         )
+            
        }
 
     </BrowserRouter>

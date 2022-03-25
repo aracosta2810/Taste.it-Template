@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 
 const AddOffertModal = ({ setData }) => {
-  //! Falta el de subir foto
+  const [toast, setToast] = useState(false);
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState(0);
   const [isEspecial, setIsEspecial] = useState(false);
@@ -11,19 +11,18 @@ const AddOffertModal = ({ setData }) => {
 
   const handleAdd = async (e) => {
     e.preventDefault();
+    if(file === '') return
 
-    let formData = new FormData(e.target.form);
+    let formData = new FormData(e.target);
     formData.set("is_especial", formData.get("is_especial") === "on" ? 1 : 0);
-
-    // formData.forEach((item) => console.log(item));
 
     setData(null);
     axios
-      .post(`${window.urlServer}offer/create`, formData)
+      .post(`${window.urlServer}offer/create`, formData, {headers:{'Authorization' : 'Bearer ' + localStorage.getItem('token')}})
       .then((res) => {
-        if (!res.data.success) {
-          console.log('Hubo un error al agregar la oferta: ' + res.data.message);
-          return
+        if (res.data.success) {
+          setToast(true)
+          setTimeout(() => setToast(false), 3000)
         }
         let newData = res.data.data;
 
@@ -33,6 +32,7 @@ const AddOffertModal = ({ setData }) => {
           });
         });
         setData(newData);
+        cleanFields()
       })
       .catch((e) => console.log(e));
   };
@@ -40,6 +40,7 @@ const AddOffertModal = ({ setData }) => {
   const cleanFields = () => {
     setTitle("");
     setPrice(0);
+    setFile('')
     setIsEspecial(false);
     setInfo("");
   };
@@ -66,7 +67,7 @@ const AddOffertModal = ({ setData }) => {
           </div>
           <form
             id="form"
-            // onSubmit={(e) => handleAdd(e)}
+            onSubmit={(e) => handleAdd(e)}
             className="modal-body"
             encType="multipart/form-data"
           >
@@ -96,6 +97,7 @@ const AddOffertModal = ({ setData }) => {
                 id="inputName"
                 className="form-control"
                 onChange={(e) => setTitle(e.target.value)}
+                required
                 value={title}
               />
             </div>
@@ -105,6 +107,7 @@ const AddOffertModal = ({ setData }) => {
                 <input
                   name="price"
                   type="number"
+                  min={0}
                   id="inputClientCompany"
                   className="form-control w-25"
                   onChange={(e) => setPrice(e.target.value)}
@@ -132,13 +135,10 @@ const AddOffertModal = ({ setData }) => {
                   name="photo"
                   type="file"
                   accept="image/*"
-                  onChange={(e) =>
-                    e.target.files.length === 0
-                      ? ""
-                      : setFile(e.target.files[0])
-                  }
+                  onChange={(e) =>e.target.files.length === 0? "": setFile(e.target.files[0])}
                   className="custom-file-input"
                   id="exampleInputFile"
+                  required
                 />
                 <label className="custom-file-label" htmlFor="photo">
                   {file.name}
@@ -154,6 +154,7 @@ const AddOffertModal = ({ setData }) => {
                 className="form-control mb-2"
                 onChange={(e) => setInfo(e.target.value)}
                 value={info}
+                required
               />
             </div>
             <div className="d-flex justify-content-end">
@@ -166,16 +167,30 @@ const AddOffertModal = ({ setData }) => {
                 Clean
               </button>
               <button
-                type="button"
+                type="submit"
                 className="btn btn-info"
-                onClick={(e) => handleAdd(e)}
-                data-dismiss="modal"
               >
                 <i className="fas fa-plus mr-2" />
                 Add
               </button>
             </div>
           </form>
+
+          {
+            toast?
+              <div id="toastsContainerTopRight" className="toasts-top-right fixed">
+                <div className="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                  <div className="toast-header"><strong className="mr-auto">Info</strong>
+                    <button onClick={() => setToast(false)} data-dismiss="toast" type="button" className="ml-2 mb-1 close" aria-label="Close"><span aria-hidden="true">×</span></button>
+                  </div>
+                  <div className="toast-body">
+                    Offer created successfully
+                  </div>
+                </div>
+              </div>
+            :
+              null
+          }
         </div>
         {/* /.modal-content */}
       </div>

@@ -24,7 +24,10 @@ const EspecialOffers = () => {
                   <h3>{item.section}</h3>
                 </div>
                   {
-                    item.offers.map((item2, key) => 
+                    item.offers.length === 0 ? (
+                      <p className="text-center">There are no offers</p>
+                    ) : (
+                      item.offers.map((item2, key) => 
                       (item2.is_especial === 1)?
                       <div key={key} className={`menus d-flex ${item.offers[item.offers.length-1] === item2? "border-bottom-0" : ""}`  }>
                         <div
@@ -47,9 +50,10 @@ const EspecialOffers = () => {
                       </div>:
                       null
                     )
+                    )
                   }
-                {/* <span className={`flat ${item.icons[0]}`} style={{ left: 0 }} />
-                <span className={`flat ${item.icons[1]}`} style={{ right: 0 }} /> */}
+                <span className={`flat ${item.icons[0]}`} style={{ left: 0 }} />
+                <span className={`flat ${item.icons[1]}`} style={{ right: 0 }} />
               </div>
             </div>
             )

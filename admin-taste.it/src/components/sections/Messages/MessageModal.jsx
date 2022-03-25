@@ -4,21 +4,11 @@ const MessageModal = ({ currentData, setData }) => {
   const handleDeleteData = async () => {
     // ! Hacer esto despues, empaquetar la infrmacion y tal. Falta el token
     axios
-      .post(`${window.urlServer}/contact/delete`, {ids:[currentData.id], token: {} })
-      .then((res) => console.log(res))
+      .post(`${window.urlServer}contact/delete`, {ids:[currentData.id] },{headers: {'Authorization' : 'Bearer '+localStorage.getItem('token')}})
+      .then((res) => setData(res.data.data))
       .catch((e) => console.log(e));
 
       setData(null)
-
-    // fetch(`http://192.168.43.2:8080/taste-it/public/contact/delete`, {
-    //   method:"DELETE",
-    //   body:{
-    //     ids:[7]
-    //   }
-    // }).then(res => res.json())
-    // .then((res) => console.log(res))
-    // .catch((e) => console.log(e));
-      
   };
 
   return (

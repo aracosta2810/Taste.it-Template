@@ -16,14 +16,15 @@ const Login = ({handleLogin}) => {
             <form action="../../index3.html" method="post" onSubmit={(e) => handleLogin(e)}>
               <div className="input-group mb-3">
                 <input
-                  type="text"
+                  type="email"
                   className="form-control"
                   id="user"
-                  placeholder="User"
+                  placeholder="Email"
+                  required
                 />
                 <div className="input-group-append">
                   <div className="input-group-text">
-                    <span className="fas fa-user" />
+                    <span className="fas fa-envelope" />
                   </div>
                 </div>
               </div>
@@ -33,6 +34,7 @@ const Login = ({handleLogin}) => {
                   className="form-control"
                   id="pass"
                   placeholder="Password"
+                  required
                 />
                 <div className="input-group-append">
                   <div className="input-group-text">

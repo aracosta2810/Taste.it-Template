@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import DeleteModal from "../DeleteModal";
 import MessageModal from "./MessageModal";
+import Toast from "../../Toast";
 
 const testData = [
   {
@@ -23,6 +24,7 @@ const testData = [
 ];
 
 const Messages = () => {
+  const [toast, setToast] = useState(false)
   const [data, setData] = useState(null); // esto va null
   const [currentData, setCurrentData] = useState({})
   const [messageModal, setMessageModal] = useState(false);
@@ -34,8 +36,6 @@ const Messages = () => {
     setCurrentData(newData)
   };
 
-  //?Poner url bien cuando lo vayas a probar bien
-  //*/contact
   useEffect(() => {
     // testData.forEach(item => {
     //   item.isSelected = false
@@ -43,8 +43,13 @@ const Messages = () => {
     // setData(testData)
 
     //--------------------------------
-    axios.get(`${window.urlServer}contact`, { token: {} })
+    axios.get(`${window.urlServer}contact`, {headers: {'Authorization' : 'Bearer '+localStorage.getItem('token')}})
       .then((res) => {
+        if(res.data.length === 0) {
+          setData([])
+          return
+        }
+
         let data = res.data
         
         data.forEach(item => item.isSelected = false)
@@ -97,28 +102,6 @@ const Messages = () => {
     setData(newData);
   }; 
   
-  const handleRefresh = () =>{
-    // testData.forEach(item => {
-    //   item.isSelected = false
-    // })
-    setData(null)
-
-
-    setData(testData)
-    console.log(data);
-
-    //--------------------------------
-    // axios.get(`${window.urlServer}/contact`, { token: {} })
-    //   .then((res) => {
-    //     let data = res.data
-
-    //     data.forEach(item => item.isSelected = false)
-    //     setData(data)
-    //     // console.log(res);
-    //   })
-    //   .catch((e) => console.log("Error " + e));
-  }
-
   return (
     <div
       className="tab-pane text-left fade show active py-4"
@@ -134,7 +117,7 @@ const Messages = () => {
           <i className="fas fa-2x fa-sync-alt fa-spin mt-5"></i>
         </div>
       ) : data.length === 0? 
-          <h2 className="mt-4 text-center">There is nothing to show</h2>
+          <h2 className="mt-4 text-center">There are no messages</h2>
         :(
         <div className="card card-primary card-outline">
           <div className="card-header">
@@ -194,8 +177,7 @@ const Messages = () => {
                         </td>
                         {/* <td className="mailbox-name"></td> */}
                         <td className="mailbox-name">{item.name}</td>
-                        <td className="mailbox-subject">{item.email}</td>
-                        <td className="mailbox-attachment" />
+                        <td className="mailbox-subject d-none d-md-block">{item.email}</td>
                         <td className="mailbox-date" style={{fontSize:'0.8rem'}}>{item.date}</td>
                       </tr>
                     )
@@ -213,7 +195,7 @@ const Messages = () => {
               <button onClick={() => handleSelect(null, true)} type="button" className="btn btn-default btn-sm checkbox-toggle"><i className="far fa-check-square" />
               </button>
               <div className="btn-group">
-                <button onClick={(e) => handleDeleteModal()} data-toggle="modal" data-target="#modal-deleteMessageModal"type="button" className="btn btn-default btn-sm"><i className="far fa-trash-alt" /></button>
+                <button onClick={(e) => handleDeleteModal()} data-toggle="modal" data-target="#modal-deleteMessageModal" type="button" className="btn btn-default btn-sm"><i className="far fa-trash-alt" /></button>
               </div>
               {/* /.btn-group */}
               <div className="float-right">
@@ -229,8 +211,16 @@ const Messages = () => {
           </div>
         </div>
        )}
-      {deleteModal? <DeleteModal currentData={currentData} setData={setData} url={`${window.urlServer}contact/delete`} /> : null}
+      {deleteModal? <DeleteModal currentData={currentData} setToast={setToast} setData={setData} url={`${window.urlServer}contact/delete`} /> : null}
       {messageModal? <MessageModal currentData={currentData} setData={setData}/> : null}
+
+      {
+        toast?
+          <Toast setToast={setToast} message={'Message(s) deleted successfully'}/>
+        :
+          null
+      }
+    
     </div>
   );
 };

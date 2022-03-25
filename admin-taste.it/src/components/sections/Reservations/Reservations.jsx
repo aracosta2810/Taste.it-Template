@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Toast from "../../Toast";
 
 const testData = [
   {
@@ -29,10 +30,15 @@ const Reservations = () => {
   useEffect(() => {
     // setData(testData);
     
-    axios.get(`${window.urlServer}book-table`, {
-      token: localStorage.getItem('token')
-    })
+    axios.get(`${window.urlServer}book-table`, {headers:{'Authorization' : 'Bearer ' + localStorage.getItem('token')}})
     .then(res => {
+      console.log(res);
+
+      if(res.data.length === 0) {
+        setData([])
+        return
+      }
+
       let data = res.data
 
       data.forEach(item => item.isSelected = false)
@@ -48,15 +54,17 @@ const Reservations = () => {
       if (item.isSelected) ids.push(item.id);
     });
 
-    // setToast(true)
-    // setTimeout(() => setToast(false), 2000)
-
     axios
-      .post(accept ? `${window.urlServer}book-table/confirmate` : `${window.urlServer}book-table/denegate`, {
-        ids: [...ids],
-        token: "",
+      .post(accept ? `${window.urlServer}book-table/confirmate` : `${window.urlServer}book-table/denegate`, 
+        {ids: [...ids]},
+        {headers: {'Authorization' : `Bearer ${localStorage.getItem('token')}`}}
+      )
+      .then((res) => {
+        if (res.data.success) {
+          setToast(true)
+          setTimeout(() => setToast(false), 2000)
+        }
       })
-      .then((res) => console.log(res))
       .catch((e) => console.log("Error: " + e));
   };
 
@@ -101,26 +109,19 @@ const Reservations = () => {
 
   return data == null ? (
     <div
-      className="d-flex justify-content-center mt-5"
+      className="d-flex justify-content-center pt-5"
       style={{ fontSize: "1.5rem" }}
     >
       <i className="fas fa-2x fa-sync-alt fa-spin mt-5"></i>
     </div>
   ) : data.length === 0? 
-      <h2 className="mt-4 text-center">There is nothing to show</h2>
+      <h2 className="pt-4 text-center">There are no reservations requests</h2>
     : (
     <div>
 
       {
         toast?
-          <div id="toastsContainerTopRight" className="toasts-top-right fixed">
-            <div className="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
-              <div className="toast-header"><strong className="mr-auto">Info</strong>
-                <button onClick={() => setToast(false)} data-dismiss="toast" type="button" className="ml-2 mb-1 close" aria-label="Close"><span aria-hidden="true">×</span>
-                </button></div><div className="toast-body">Lorem ipsum dolor sit amet, consetetur sadipscing elitr.
-              </div>
-            </div>
-          </div>
+          <Toast setToast={setToast} message={'Operation completed successfully'} />
         :
           null
       }

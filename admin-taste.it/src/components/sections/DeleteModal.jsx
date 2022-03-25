@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const DeleteModal = ({ currentData, url, setData }) => {
+const DeleteModal = ({ currentData, url, setData, setToast }) => {
   const handleDeleteData = async () => {
     let ids = [];
 
@@ -11,14 +11,26 @@ const DeleteModal = ({ currentData, url, setData }) => {
     setData(null);
 
     axios
-      .post(url, { ids: [...ids] })
+      .post(url, { ids: [...ids] }, {headers:  {'Authorization' : 'Bearer '+localStorage.getItem('token')}})
       .then((res) => {
+        if (res.data.success) {
+          setToast(true)
+          setTimeout(() => setToast(false), 3000)
+        }
+        if(res.data.data.length === 0) {
+          setData([])
+          return
+        }
         let newData = res.data.data;
-        console.log(res);//dsadsd
+
         newData.forEach((item) => {
-          item.offers.forEach((item2) => {
-            item2.isSelected = false;
-          });
+          if(item.offers !== undefined){
+            item.offers.forEach((item2) => {
+              item2.isSelected = false;
+            });
+          }else {
+            item.isSelected = false
+          }
         });
         setData(newData);
       })
@@ -53,7 +65,7 @@ const DeleteModal = ({ currentData, url, setData }) => {
               This action has not return. Are you sure you want to continue?
             </p>
           </div>
-          <div className="modal-footer justify-content-between">
+          <div className="modal-footer justify-content-end">
             <button
               onClick={() => handleDeleteData()}
               type="button"
