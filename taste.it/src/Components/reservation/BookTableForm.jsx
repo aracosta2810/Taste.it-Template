@@ -5,15 +5,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import TimeField from 'react-simple-timefield';
 import axios from "axios";
 import { useState } from "react";
+import Toast from "../Toast";
 
 const BookTableForm = () => {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState('08:00');
   const handleDateChange = date => setDate(date);
   const handleTimeChange = time => setTime(time);
+  const [toast, setToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('test message');
 
   const handleSunbmit = (e) =>{
     e.preventDefault();
+    if(e.target.guest.value.toLowerCase() === 'guest') return
 
     let data ={
       name: e.target.name.value,
@@ -24,10 +28,16 @@ const BookTableForm = () => {
       guest: e.target.guest.value
     }
     
-    console.log(data);
-
-    axios.post(`${window.urlServer}/book-table/create`,data)
-    .then(res => console.log(res))
+    axios.post(`${window.urlServer}book-table/create`,data)
+    .then(res => {
+      if(res.data.success) {
+        setToastMessage('Your table has been requested successfully, we will send you an email')
+      }
+        else setToast('Sorry, there was an error')
+        
+      setToast(true)
+      setInterval(() => setToast(false), 4000)
+    })
     .catch(e => console.log("Ha habido un error " + e))
   }
 
@@ -41,17 +51,17 @@ const BookTableForm = () => {
                 <div className="row justify-content-center">
                   <div className="col-md-4">
                     <div className="form-group">
-                      <input id="name" type="name" className="form-control" placeholder="Name" />
+                      <input id="name" type="name" className="form-control" placeholder="Name" required/>
                     </div>
                   </div>
                   <div className="col-md-4">
                     <div className="form-group">
-                      <input id="email" type="email" className="form-control" placeholder="Email" />
+                      <input id="email" type="email" className="form-control" placeholder="Email"  required/>
                     </div>
                   </div>
                   <div className="col-md-4">
                     <div className="form-group">
-                      <input id="phone" type="text" className="form-control" placeholder="Phone" />
+                      <input id="phone" type="text" className="form-control" placeholder="Phone"  required/>
                     </div>
                   </div>
                   <div className="col-md-4">
@@ -80,7 +90,7 @@ const BookTableForm = () => {
                       <div className="form-field">
                         <div className="select-wrap">
                           <div className="icon"><span className="fa fa-chevron-down" /></div>
-                          <select id="guest" className="form-control">
+                          <select id="guest" className="form-control" required>
                             <option value>Guest</option>
                             <option value='1'>1</option>
                             <option value='2'>2</option>
@@ -102,6 +112,8 @@ const BookTableForm = () => {
             </div>
           </div>
         </div>
+
+        {toast? <Toast message={toastMessage} setToast={setToast}/> : null}
       </section>
     );
 }

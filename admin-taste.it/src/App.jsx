@@ -6,11 +6,9 @@ import Content from './components/Content';
 import axios from 'axios';
 
 
-const data = {user:'adrian', password:'1234'}
-
-// Axios.interceptors.request.use
-
+window.urlServer = 'localhost:' + process.env.REACT_APP_SERVER_PORT+ '/taste-it/public/'
 function App() {
+  
   const [loading, setLoading] = useState(true)
   const [isLogin, setIsLogin] = useState(false)
   const [user, setUser] = useState(null)
@@ -26,7 +24,6 @@ function App() {
       // Ver si hay algun usuario logueado
       try {
         const res = await axios.post(window.urlServer+'user', {}, {headers:  {'Authorization' : 'Bearer '+localStorage.getItem('token')}})
-        console.log(res.data);
         
         setLoading(false)
         if (res.data.success) {
@@ -38,19 +35,9 @@ function App() {
         console.log(error);
       }
       
-      // setIsLogin(true)
-      // setUser({
-      //   name: 'Adrian', 
-      //   isSuperAdmin: true
-      // })
     }
 
     cargarUsuario()
-
-    return
-    axios.get(window.urlServer)
-    .then(res => console.log(res))
-    .catch(e => console.log(e))
 
   }, [])
   
@@ -68,22 +55,18 @@ function App() {
         console.log(res);
         return
       }
+      setUser(res.data.user)
       setIsLogin(true)
       localStorage.setItem('token', res.data.token)
-      setUser(res.data.user)
     })
     .catch(e => console.log(e))
-
-    // setUser({name: 'Adrian', isSuperUser: true})
-    // setIsLogin(true)
-    // localStorage.setItem('token', e.target.user.value +'ADSDA' + e.target.pass.value + 'dsadf')
 }
 
   return (
     <BrowserRouter >
        {
          loading? (
-          <div className="d-flex justify-content-center align-items-center" style={{ fontSize: "1.5rem", height:'100vh' }}>
+          <div  className="d-flex justify-content-center align-items-center" style={{ fontSize: "1.5rem", height:'100vh' }}>
             <div>
               <p className='display-4'><b>Taste.it</b>- Admin</p>
               <div className='d-flex justify-content-center'>
@@ -92,7 +75,7 @@ function App() {
             </div>
           </div>
          ) : isLogin && user !== null ? (
-          <Content user={user} setIsLogin={setIsLogin}/>
+          <Content user={user} setIsLogin={setIsLogin} setUser={setUser}/>
          ) : (
           <Login handleLogin={handleLogin}/>
          )

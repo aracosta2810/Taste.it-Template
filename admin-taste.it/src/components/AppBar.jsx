@@ -1,11 +1,11 @@
 import { useState } from "react";
-import EditProfileModal from "./EditProfileModal";
+import { Link } from "react-router-dom";
 
-const AppBar = ({ user, setIsLogin }) => {
-  const [modal, setModal] = useState(false)
+const AppBar = ({ user, setUser, setIsLogin }) => {
   
   function handleLogOut() {
     localStorage.clear();
+    setUser(null)
     setIsLogin(false);
   }
 
@@ -28,7 +28,6 @@ const AppBar = ({ user, setIsLogin }) => {
                 Home
               </a>
             </li> */}
-           <button onClick={(e) => setModal(true)} data-toggle="modal" data-target="#modal-EditProfileModal" type="button" className="btn btn-default btn-sm"><i className="far fa-trash-alt" /></button>
       </ul>
 
       {/* -----------User section---------- */}
@@ -40,7 +39,7 @@ const AppBar = ({ user, setIsLogin }) => {
           </div>
           {/* Dropdown menu */}
           <div className="dropdown-menu dropdown-menu-md dropdown-menu-right">
-            <div className="dropdown-item" onClick={() => setModal(true)} data-toggle="modal" data-target="#modal-deleteModal">
+            <Link className="dropdown-item" to={'edit-profile'} >
               <div className="media">
                 <div className="media-body">
                   <p className="dropdown-item-title d-flex justify-content-between align-items-center">
@@ -52,7 +51,7 @@ const AppBar = ({ user, setIsLogin }) => {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
             <div className="dropdown-divider" />
             <div className="dropdown-item" onClick={() => handleLogOut()}>
               <div className="media" >

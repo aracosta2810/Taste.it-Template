@@ -78,7 +78,7 @@ const NewAdminForm = ({setData}) => {
                 type="password"
                 className="form-control"
                 id="password"
-                placeholder="Password"
+                placeholder="Password(min-6 characters)"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -89,7 +89,7 @@ const NewAdminForm = ({setData}) => {
               <input
                 type="password"
                 className="form-control"
-                id="confirmPassword"
+                id="confirmPassword(min-6 characters)"
                 placeholder="Password"
                 required
                 value={password_confirmation}

@@ -32,8 +32,6 @@ const Reservations = () => {
     
     axios.get(`${window.urlServer}book-table`, {headers:{'Authorization' : 'Bearer ' + localStorage.getItem('token')}})
     .then(res => {
-      console.log(res);
-
       if(res.data.length === 0) {
         setData([])
         return

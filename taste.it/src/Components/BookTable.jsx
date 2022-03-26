@@ -7,15 +7,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import TimeField from 'react-simple-timefield';
 import axios from "axios";
 import { useState } from "react";
+import Toast from "./Toast";
 
 const BookTable = () => {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState('08:00');
+  const [toast, setToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('test message');
 
   const handleDateChange = date => setDate(date);
 
   const handleSunbmit = (e) =>{
     e.preventDefault();
+    if(e.target.guest.value.toLowerCase() === 'guest') return
 
     let data ={
       name: e.target.name.value,
@@ -25,11 +29,15 @@ const BookTable = () => {
       time,
       guest: e.target.guest.value
     }
-    
-    console.log(data);
 
     axios.post(`${window.urlServer}book-table/create`,data)
-    .then(res => console.log(res))
+    .then(res => {
+      if(res.data.success) setToastMessage('Your table has been requested successfully, we will send you an email')
+        else setToast('Sorry, there was an error')
+        
+      setToast(true)
+      setInterval(() => setToast(false), 4000)
+    })
     .catch(e => console.log("Ha habido un error " + e))
 
   }
@@ -46,12 +54,12 @@ const BookTable = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
-                          <input id="name" type="name" className="form-control" placeholder="Name" />
+                          <input id="name" type="name" className="form-control" placeholder="Name" required/>
                         </div>
                       </div>
                       <div className="col-md-12">
                         <div className="form-group">
-                          <input id="email" type="email" className="form-control" placeholder="Email" />
+                          <input id="email" type="email" className="form-control" placeholder="Email" required/>
                         </div>
                       </div>
                       <div className="col-md-12">
@@ -85,7 +93,7 @@ const BookTable = () => {
                           <div className="form-field">
                             <div className="select-wrap">
                               <div className="icon"><span className="fa fa-chevron-down" /></div>
-                              <select id="guest" className="form-control">
+                              <select id="guest" className="form-control" required>
                                 <option value>Guest</option>
                                 <option value='1'>1</option>
                                 <option value='2'>2</option>
@@ -126,6 +134,7 @@ const BookTable = () => {
             </div>
         </section>
         
+        {toast? <Toast message={toastMessage} setToast={setToast}/> : null}
       </div>
     );
 }

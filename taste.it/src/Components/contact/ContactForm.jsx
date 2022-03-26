@@ -1,24 +1,36 @@
 import axios from "axios";
+import { useState } from "react";
+import Toast from '../Toast'
 
 const ContactForm = () => {
+  const [toast, setToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('test message');
+
+
     const handleSubnmit = (e) => {
       e.preventDefault()
 
-      // console.log({name: e.target.name.value,
-      //   email: e.target.email.value,
-      //   subject: e.target.subject.value,
-      //   message: e.target.message.value});
+      let data = {//modificar con la ruta correcta
+        name: e.target.name.value,
+        email: e.target.email.value,
+        subject: e.target.subject.value,
+        message: e.target.message.value,
+      }
 
-        let data = {//modificar con la ruta correcta
-          name: e.target.name.value,
-          email: e.target.email.value,
-          subject: e.target.subject.value,
-          message: e.target.message.value,
-        }
-        // console.log(data);
-        // return
       axios.post(`${window.urlServer}contact/create`,data)
-      .then(res => console.log(res))
+      .then(res => {
+        if(res.data.success) {
+          setToastMessage('Your message has been delivered successfully')
+          e.target.name.value = ''
+          e.target.email.value = ''
+          e.target.subject.value = ''
+          e.target.message.value = ''
+        }
+        else setToast('Sorry, there was an error')
+        
+        setToast(true)
+        setInterval(() => setToast(false), 4000)
+      })
       .catch(e => console.log("Error: " + e))
     }
 
@@ -30,21 +42,23 @@ const ContactForm = () => {
               <h2 className="h4 mb-5 font-weight-bold">Contact Us</h2>
               <form onSubmit={(e) => handleSubnmit(e)} action="post">
                 <div className="form-group">
-                  <input id="name" type="text" className="form-control" placeholder="Your Name" />
+                  <input id="name" type="text" className="form-control" placeholder="Your Name" required/>
                 </div>
                 <div className="form-group">
-                  <input id="email" type="text" className="form-control" placeholder="Your Email" />
+                  <input id="email" type="text" className="form-control" placeholder="Your Email" required/>
                 </div>
                 <div className="form-group">
-                  <input id="subject" type="text" className="form-control" placeholder="Subject" />
+                  <input id="subject" type="text" className="form-control" placeholder="Subject" required/>
                 </div>
                 <div className="form-group">
-                  <textarea id="message" cols={30} rows={7} className="form-control" placeholder="Message" defaultValue={""} />
+                  <textarea id="message" cols={30} rows={7} className="form-control" placeholder="Message" required defaultValue={""} />
                 </div>
                 <div className="form-group">
-                  <input type="submit" defaultValue="Send Message" className="btn btn-primary py-3 px-5" />
+                  <input type="submit" defaultValue="Send Message" className="btn btn-primary py-3 px-5" required/>
                 </div>
               </form>
+
+              {toast? <Toast message={toastMessage} setToast={setToast}/> : null}
             </div>
             <div className="col-md-6 d-flex align-items-stretch">
                 {/* Mapa google, arreglar */}

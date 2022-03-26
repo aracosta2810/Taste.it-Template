@@ -12,14 +12,16 @@ import MenuSection from "./Routes/MenuSection";
 import Reservation from "./Routes/Reservation";
 import { useDispatch } from "react-redux";
 import { SET_OFFERS } from "./Redux/OffersSlice";
+import Error404 from "./Components/Error404";
+
+window.urlServer = 'localhost:' + process.env.REACT_APP_SERVER_PORT+ '/taste-it/public/'
  
-//Modificar para pedir datos al servidor
 function App() {
   const dispatch = useDispatch();
   const [loadingInfo, setLoadingInfo] = useState(true)
 
   useEffect(()=>{
-    axios.get(window.urlServer)//Aqui se piden todas las ofertas para luego modificarlas en redux
+    axios.get(window.urlServer+'offer')//Aqui se piden todas las ofertas para luego modificarlas en redux
     .then(res => {
       setLoadingInfo(false)
       // console.log(res.data);
@@ -49,6 +51,7 @@ function App() {
         <Route path="/menu" element={<MenuSection />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<Error404 />} />
       </Routes>
       <Footer />
     </div>

@@ -65,7 +65,7 @@ const Offers = () => {
 
     // setData(offers);
     axios
-      .get(window.urlServer)
+      .get(window.urlServer+'offer')
       .then((res) => {
         // console.log(res);
         let newData = res.data

@@ -24,6 +24,8 @@ const AddOffertModal = ({ setData }) => {
           setToast(true)
           setTimeout(() => setToast(false), 3000)
         }
+        console.log(res
+          );
         let newData = res.data.data;
 
         newData.forEach((item) => {

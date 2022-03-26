@@ -104,34 +104,9 @@ const Home = ({ user }) => {
         :
           null
       }
-
-      {/* Revisar editar perfil */}
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <input id="name" type="text" placeholder="name" />
-        <input id="oldPassword" type="password" placeholder="Old password" />
-        <input id="newPassword" type="password" placeholder="New Password" />
-        <input id="confirmPassword" type="password" placeholder="Confirm Password" />
-        <button >Dale</button>
-      </form>
     </div>
   );
-  function handleSubmit(e) {
-    e.preventDefault()
-
-    const data = {
-      name : e.target.name.value,
-      old_password : e.target.oldPassword.value,
-      password : e.target.newPassword.value,
-      password_confirmation : e.target.confirmPassword.value,
-    }
-
-    axios.post(window.urlServer + 'admin/update', data,
-      {
-        headers: {'Authorization' : 'Bearer ' + localStorage.getItem('token')}
-      }
-    ).then(res => console.log(res))
-    .catch(e => console.log(e))
-  }
+  
 };
 
 export default Home;

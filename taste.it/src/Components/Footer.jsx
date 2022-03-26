@@ -1,8 +1,28 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart,   } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook, faTwitter, faInstagram } from "@fortawesome/fontawesome-free-brands";
+import axios from "axios";
+import { useState } from "react";
+import Toast from "./Toast";
 
 const Footer = () => {
+    const [toast, setToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('test message')
+
+    function handleSuscribe(e) {
+        e.preventDefault()
+
+        axios.post(window.urlServer + 'subscribe/create', {email: e.target.email.value})
+        .then(res => {
+            if(res.data.success) setToastMessage(res.data.message)
+            else setToast('Sorry, there was an error')
+            
+            setToast(true)
+            setInterval(() => setToast(false), 4000)
+        })
+        .catch(e => console.log(e))
+    }
+
     return (
         <footer className="ftco-footer ftco-no-pb ftco-section">
             <div className="container">
@@ -63,11 +83,13 @@ const Footer = () => {
                 <div className="ftco-footer-widget mb-4">
                     <h2 className="ftco-heading-2">Newsletter</h2>
                     <p>Far far away, behind the word mountains, far from the countries.</p>
-                    <form action="#" className="subscribe-form">
-                    <div className="form-group">
-                        <input type="text" className="form-control mb-2 text-center" placeholder="Enter email address" />
-                        <input type="submit" defaultValue="Subscribe" className="form-control submit px-3" />
-                    </div>
+                    <form onSubmit={(e) => handleSuscribe(e)} className="subscribe-form">
+                        <div className="form-group">
+                            <input id="email" type="email" required className="form-control mb-2 text-center" placeholder="Enter email address" />
+                            <input type="submit" defaultValue="Subscribe" className="form-control submit px-3" />
+                        </div>
+
+                    {toast? <Toast message={toastMessage} setToast={setToast}/> : null}
                     </form>
                 </div>
                 </div>
@@ -82,6 +104,7 @@ const Footer = () => {
                 </div>
             </div>
             </div>
+
       </footer>
     );
 }

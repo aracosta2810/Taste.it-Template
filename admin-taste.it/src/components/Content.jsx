@@ -6,12 +6,13 @@ import Offers from "./sections/Offers/Offers";
 import Reservations from "./sections/Reservations/Reservations";
 import Error404 from "./Error404";
 import Home from "./Home/Home";
+import EditProfile from "./EditProfile";
 
-const Content = ({user, setIsLogin}) => {
+const Content = ({user, setIsLogin, setUser}) => {
   return (
     <div className="hold-transition sidebar-mini">
       <div className="wrapper">
-        <AppBar user={user} setIsLogin={setIsLogin}/>
+        <AppBar user={user} setUser={setUser} setIsLogin={setIsLogin}/>
         <SideBar />
 
         {/* Content Wrapper. Contains page content */}
@@ -23,6 +24,7 @@ const Content = ({user, setIsLogin}) => {
               <Route path="offers" element={<Offers />} />
               <Route path="reservations" element={<Reservations />} />
               <Route path="messages" element={<Messages />} />
+              <Route path="edit-profile" element={<EditProfile data={user} setUser={setUser}/>} />
               <Route path="*" element={<Error404 />} />
             </Routes>
           </div>
