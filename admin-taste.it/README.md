@@ -1,7 +1,8 @@
 ### Informaciónn importante ###
 
-Para que el sitio funcione hay que poner dentro de public/ las carpetas ¨dist¨ y ¨plugins¨ que vienen en la raíz de la plantilla
-admin-lte
+Para que el sitio funcione hay que poner dentro de public/ las carpetas ¨dist¨ y ¨plugins¨ que vienen en la raíz de la plantilla admin-lte
+
+Luego hacer npm i
 
 ##############################
 
