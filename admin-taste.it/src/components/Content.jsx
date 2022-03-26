@@ -5,7 +5,7 @@ import Messages from "./sections/Messages/Messages";
 import Offers from "./sections/Offers/Offers";
 import Reservations from "./sections/Reservations/Reservations";
 import Error404 from "./Error404";
-import Home from "./Home/Home";
+import Home from "./sections/Home/Home";
 import EditProfile from "./EditProfile";
 
 const Content = ({user, setIsLogin, setUser}) => {

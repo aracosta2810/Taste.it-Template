@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DeleteModal from "../sections/DeleteModal";
+import DeleteModal from "../DeleteModal";
 
 const AdminsTable = ({ data, setData, setToast }) => {
   const [deleteModal, setDeleteModal] = useState(false);

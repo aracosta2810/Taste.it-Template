@@ -14,19 +14,17 @@ import { useDispatch } from "react-redux";
 import { SET_OFFERS } from "./Redux/OffersSlice";
 import Error404 from "./Components/Error404";
 
-window.urlServer = 'localhost:' + process.env.REACT_APP_SERVER_PORT+ '/taste-it/public/'
+window.urlServer = '/'
  
 function App() {
   const dispatch = useDispatch();
   const [loadingInfo, setLoadingInfo] = useState(true)
 
   useEffect(()=>{
-    axios.get(window.urlServer+'offer')//Aqui se piden todas las ofertas para luego modificarlas en redux
+    axios.get(window.urlServer+'offer')
     .then(res => {
       setLoadingInfo(false)
-      // console.log(res.data);
       dispatch(SET_OFFERS(res.data))
-      // console.log(res.data);
     })
     .catch(e => console.log("Error: "+e))
   },[])

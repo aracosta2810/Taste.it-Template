@@ -6,9 +6,9 @@ import Content from './components/Content';
 import axios from 'axios';
 
 
-window.urlServer = 'localhost:' + process.env.REACT_APP_SERVER_PORT+ '/taste-it/public/'
+window.urlServer ='/'
+
 function App() {
-  
   const [loading, setLoading] = useState(true)
   const [isLogin, setIsLogin] = useState(false)
   const [user, setUser] = useState(null)
@@ -38,10 +38,9 @@ function App() {
     }
 
     cargarUsuario()
-
   }, [])
   
-  const handleLogin = (e) => {//Modificar para pedir autenticacion al back
+  const handleLogin = (e) => {
     e.preventDefault();
 
     let data = {

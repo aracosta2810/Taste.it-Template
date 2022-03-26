@@ -7,33 +7,6 @@ import axios from "axios";
 import OffersTable from "./OffersTable"; 
 import Toast from "../../Toast";
 
-const pic = 'http://192.168.43.2:8080/taste-it/public/storage/uploads/foto.jpg'
-
-const offers = [
-  {section:'Breakfast', offers: [
-    {id: 1, 
-      url_photo: pic, title: 'Pizza', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
-    {id: 2, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 0},
-  ]},
-  {section:'Lunch', offers: [
-    {id: 4, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
-  ]},
-  {section:'Dinner', offers: [
-    {id: 7, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 0},
-    {id: 9, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
-  ]},
-  {section:'Desserts', offers: [
-    {id: 10, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
-  ]},
-  {section:'Wine Card', offers: [
-    {id: 11, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 0},
-  ]},
-  {section:'Drinks & Tea', offers: [
-    {id: 12, url_photo: pic, title: 'Beef Roast Source', info: 'Meat, Potates, Rice, Tomatoes', price: 29, is_especial: 1},
-  ]},
-]
-
-
 const Offers = () => {
   const [toast, setToast] = useState(false)
   const [data, setData] = useState(null);
@@ -42,6 +15,7 @@ const Offers = () => {
   const [addOffertModal, setAddOffertModal] = useState(false);
   const [editOffertModal, setEditOffertModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+
 
   const handleViewModal = (id, modal) => {
     modal(true);
@@ -57,13 +31,6 @@ const Offers = () => {
   };
 
   useEffect(() => {
-    offers.forEach(item => {
-      item.offers.forEach(item2 => {
-        item2.isSelected = false
-      })
-    })
-
-    // setData(offers);
     axios
       .get(window.urlServer+'offer')
       .then((res) => {
@@ -80,25 +47,6 @@ const Offers = () => {
       .catch((e) => console.log("Error " + e));
   }, []);
 
-
-  const handleRefresh = () =>{
-    // testData.forEach(item => {
-    //   item.isSelected = false
-    // })
-    setData(offers)
-    console.log(data);
-
-    //--------------------------------
-    // axios.get(`${window.urlServer}/contact`, { token: {} })
-    //   .then((res) => {
-    //     let data = res.data
-
-    //     data.forEach(item => item.isSelected = false)
-    //     setData(data)
-    //     // console.log(res);
-    //   })
-    //   .catch((e) => console.log("Error " + e));
-  }
 
   return (
     <div

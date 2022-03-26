@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate, useRoutes } from "react-router";
+import { useNavigate } from "react-router";
 
 const EditProfile = ({ data, setUser }) => {
   const navigate = useNavigate()
@@ -11,8 +11,7 @@ const EditProfile = ({ data, setUser }) => {
 
   function handleEditProfile(e) {
     e.preventDefault()
-
-
+    
     axios.post(window.urlServer + 'admin/update', {name, old_password, password, password_confirmation},
       {
         headers: {'Authorization' : 'Bearer ' + localStorage.getItem('token')}

@@ -2,34 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Toast from "../../Toast";
 
-const testData = [
-  {
-    id: 1,
-    name: "Jhon",
-    email: "example@gmail.com",
-    check_in: "28-2-2022",
-    time: "08:22 pm",
-    guest: 5,
-    isSelected: false,
-  },
-  {
-    id: 2,
-    name: "Sara",
-    email: "example@gmail.com",
-    check_in: "14-3-2022",
-    time: "09:00 pm",
-    guest: 1,
-    isSelected: false,
-  },
-];
 
 const Reservations = () => {
   const [data, setData] = useState(null);
   const [toast, setToast] = useState(false);
 
   useEffect(() => {
-    // setData(testData);
-    
     axios.get(`${window.urlServer}book-table`, {headers:{'Authorization' : 'Bearer ' + localStorage.getItem('token')}})
     .then(res => {
       if(res.data.length === 0) {

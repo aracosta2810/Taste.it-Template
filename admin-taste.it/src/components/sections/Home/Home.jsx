@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NewAdminForm from "./NewAdminForm";
 import AdminsTable from "./AdminsTable";
-import Toast from "../Toast";
+import Toast from "../../Toast";
 
 const sections = [
   {

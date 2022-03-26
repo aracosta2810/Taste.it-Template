@@ -4,25 +4,6 @@ import DeleteModal from "../DeleteModal";
 import MessageModal from "./MessageModal";
 import Toast from "../../Toast";
 
-const testData = [
-  {
-    id: 1,
-    name: "Marcelo",
-    email: "example@gmail.com",
-    subject: "Mala atención",
-    message: "Se demoran mucho en atenderte",
-    date:'17-2-2022',
-  },
-  {
-    id: 2,
-    name: "Adrian",
-    email: "example@gmail.com",
-    subject: "Buena comida",
-    message: "Excelente comida",
-    date:'16-2-2022',
-  },
-];
-
 const Messages = () => {
   const [toast, setToast] = useState(false)
   const [data, setData] = useState(null); // esto va null
@@ -37,12 +18,6 @@ const Messages = () => {
   };
 
   useEffect(() => {
-    // testData.forEach(item => {
-    //   item.isSelected = false
-    // })
-    // setData(testData)
-
-    //--------------------------------
     axios.get(`${window.urlServer}contact`, {headers: {'Authorization' : 'Bearer '+localStorage.getItem('token')}})
       .then((res) => {
         if(res.data.length === 0) {
