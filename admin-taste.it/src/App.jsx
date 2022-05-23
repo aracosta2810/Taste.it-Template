@@ -5,15 +5,18 @@ import Login from './components/Login';
 import Content from './components/Content';
 import axios from 'axios';
 
-
 window.urlServer ='/'
 
 function App() {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [isLogin, setIsLogin] = useState(false)
   const [user, setUser] = useState(null)
 
   useEffect(() => {
+    // ********Remove these comments to use test user*****
+    // setIsLogin(true)
+    // setUser({user:'ADrian'})
+    // return
     async function cargarUsuario(){
       if (localStorage.getItem('token') === null) {
         setLoading(false)
@@ -78,9 +81,7 @@ function App() {
          ) : (
           <Login handleLogin={handleLogin}/>
          )
-            
        }
-
     </BrowserRouter>
   );
 }

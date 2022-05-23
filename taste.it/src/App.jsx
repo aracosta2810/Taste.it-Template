@@ -18,7 +18,7 @@ window.urlServer = '/'
  
 function App() {
   const dispatch = useDispatch();
-  const [loadingInfo, setLoadingInfo] = useState(true)
+  const [loadingInfo, setLoadingInfo] = useState(false)
 
   useEffect(()=>{
     axios.get(window.urlServer+'offer')
