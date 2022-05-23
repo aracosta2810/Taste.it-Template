@@ -1,1 +1,1 @@
-Dentro de cada carpeta estan los pasos a seguir para que funcione cada proyecto
+Taste.it template did it with react
